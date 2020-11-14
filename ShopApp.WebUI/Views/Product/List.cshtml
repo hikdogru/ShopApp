@@ -1,8 +1,61 @@
-﻿
-
+﻿@using System.Security.Cryptography
+@model ProductViewModel
 @{
     ViewBag.Title = "title";
     //Layout = "_Layout";
+
+    var popularClass = Model.Products.Count > 1 ? "popular" : "";
+    var products = Model.Products;
+    var category = Model.Category;
 }
 
-<h2>title</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <style>
+        .popular {
+            color: green;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    @if (Model.Products.Count > 0)
+    {
+        <ul>
+            @foreach (var product in products)
+            {
+                @if (product.IsApproved)
+                {
+                    <h1 class="@popularClass">Category Name: @category.Name</h1>
+
+                    <li>
+                        <div>
+                            <h3>Name: @product.Name</h3>
+                            <h3>Price: @product.Price</h3>
+                            <h3>Description: @product.Description</h3>
+                            <br />
+                        </div>
+                    </li>
+                }
+
+                else
+                {
+                    <li style="color: red">
+                        This product is not on sale!
+                    </li>
+                }
+
+            }
+        </ul>
+    }
+    else
+    {
+        <p style="color: red">Product is not found!</p>
+    }
+
+</body>
+</html>
