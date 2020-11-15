@@ -37,10 +37,19 @@ namespace ShopApp.WebUI.Controllers
                 new Product() {Id = 2, Name = "Xioami Mi 10", Price = 800, Description = "Incredible phone", IsApproved = true}
             };
 
-            var category = new Category(){Id = 1, Name = "Smart Phones", Description = "This is category of smart phones."
-            }; 
+            var categories = new List<Category>()
+            {
+                new Category(){Id = 1, Name = "Cell Phones", Description = "This is category of cell Phones."},
+                new Category(){Id = 2, Name = "Television", Description = "This is category of television."},
+                new Category(){Id = 3, Name = "Computers", Description = "This is category of Computers.",},
+                new Category(){Id = 4, Name = "Tablets", Description = "This is category of Tablets.",},
+                new Category(){Id = 5, Name = "Components", Description = "This is category of Components."},
+                
+                }; 
+
+
             //ViewBag.Category = category;
-            var productViewModel = new ProductViewModel(){Category = category, Products = products};
+            var productViewModel = new ProductViewModel(){Categories = categories, Products = products};
             return View(productViewModel);
         }
 

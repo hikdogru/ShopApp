@@ -1,8 +1,17 @@
-﻿
-
-@{
-    ViewBag.Title = "title";
-    //Layout = "_Layout";
+﻿@{
+    Layout = null;
 }
 
-<h2>title</h2>
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>title</title>
+</head>
+
+<body>
+    @await Html.PartialAsync("_Navbar")
+</body>
+
+</html>
