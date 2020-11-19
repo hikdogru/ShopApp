@@ -4,15 +4,17 @@
 *@
 @model Product
 
-<div class="card">
+<div class="card mb-3">
     <img class="card-img-top"
-         src="https://cdn.cnbj1.fds.api.mi-img.com/product-images/mi10ultra/index_del_list3.png"
+         src="~/img/@Model.ImageUrl"
          alt="">
     <div class="card-body">
         <h5 class="card-title">@Model.Name</h5>
         <p class="card-text">
             @Model.Description
         </p>
-        <a href="" class="btn btn-primary">View</a>
+        @* <a href="/Product/Details/@Model.ProductId" class="btn btn-primary">View</a>
+            Aşağıdaki kullanımımla aynı işi görür.*@
+        <a asp-controller="Product" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-primary">View</a>
     </div>
 </div>

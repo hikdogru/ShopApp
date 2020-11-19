@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>_Layout</title>
+    <link rel="stylesheet" href="/modules/bootstrap/dist/css/bootstrap.min.css"
+          integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link href="~/css/style.css" rel="stylesheet" />
+    <style>
+        .popular {
+            color: green;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    @* MessageBox bölümü sayfada varsa *@
+    @if (IsSectionDefined("MessageBox"))
+    {
+        @* Sayfalarda bu bölümün zorunlu olmaması için false yazdık.
+            ContentPlaceHolder benzeri bir yapı.*@
+        @* @RenderSection("MessageBox", false) *@
+        @* if ile kontrol ettiğimiz için false değerine gerek kalmadı. *@
+        @RenderSection("MessageBox")
+    }
+    else
+    {
+        <div class="alert alert-primary text-center m-0">
+            Welcome!
+        </div>
+    }
+
+
+
+    @await Html.PartialAsync("_Navbar")
+    @*@await Html.PartialAsync("_Header")*@
+    <partial name="_Header" /> @* Partial View kullanımının alternatifi *@
+
+    <main>
+        <div class="container">
+            @if (IsSectionDefined("Categories"))
+            {
+                <div class="row">
+                    <div class="col-md-3">
+                        @* Categories*@
+                        @RenderSection("Categories", false)
+                    </div>
+
+                    <div class="col-md-9">
+                        @* Products *@
+                        @RenderBody()
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    <div class="col-md-12">
+                        @RenderBody()
+                    </div>
+                </div>
+            }
+
+        </div>
+    </main>
+    
+<footer class="py-5 bg-dark text-white text-center">
+Shop App | 2020
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    @RenderSection("Scripts", false)
+
+
+</body>
+</html>

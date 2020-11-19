@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ShopApp.WebUI.Data;
+using ShopApp.WebUI.Models;
+using ShopApp.WebUI.ViewModels;
 
 namespace ShopApp.WebUI.Controllers
 {
@@ -11,12 +14,9 @@ namespace ShopApp.WebUI.Controllers
         // localhost:5000/Home/Index
         public IActionResult Index()
         {
-            int our = DateTime.Now.Hour;
 
-            string message = our > 12 ? "Have a nice day" : "Good morning";
-            ViewBag.Greeting = message;
-            ViewBag.UserName = "John";
-            return View();
+            var productViewModel = new ProductViewModel() { Products = ProductRepository.Products };
+            return View(productViewModel);
         }
         // localhost:5000/Home/About
         public IActionResult About()

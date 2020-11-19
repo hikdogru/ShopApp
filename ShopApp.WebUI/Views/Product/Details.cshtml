@@ -1,20 +1,29 @@
 ﻿@model Product
-@{
-    ViewBag.Title = "title";
-    //Layout = "_Layout";
+@* Categories*@
+@section Categories
+{
+    @await Component.InvokeAsync("Categories")
 }
 
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+@* Details *@
 
-<body>
-    @await Html.PartialAsync("_Navbar")
-</body>
+<div class="card mb-3">
 
-</html>
+    <div class="card-body">
+        <div class="row no-gutters">
+            <div class="col-md-3">
+                <img src="~/img/@Model.ImageUrl" alt="Image Product" class="card-img">
+            </div>
+            <div class="col-md-9">
+
+                <h5 class="card-title">@Model.Name</h5>
+                <p class="card-text">@Model.Description</p>
+                <p class="card-text">
+                    <small class="text-muted">5 days ago</small>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</div>

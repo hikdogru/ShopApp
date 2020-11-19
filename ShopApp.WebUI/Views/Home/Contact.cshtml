@@ -1,17 +1,9 @@
-﻿@{
-    Layout = null;
+﻿@* Categories*@
+@section Categories
+{
+    @await Component.InvokeAsync("Categories")
 }
 
-<!DOCTYPE html>
 
-<html>
-
-<head>
-    <title>title</title>
-</head>
-
-<body>
-    @await Html.PartialAsync("_Navbar")
-</body>
-
-</html>
+@* Contact *@
+Contact

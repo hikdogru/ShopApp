@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ShopApp.WebUI.Data;
 using ShopApp.WebUI.Models;
 using ShopApp.WebUI.ViewModels;
 
@@ -17,7 +18,7 @@ namespace ShopApp.WebUI.Controllers
             // ViewData
 
             var product = new Product
-            { Id = 2, Name = "Samsung Galaxy S20 Ultra", Price = 1000, Description = "Very nice telephone." };
+            { ProductId  = 2, Name = "Samsung Galaxy S20 Ultra", Price = 1000, Description = "Very nice telephone." };
             ViewData["Product"] = product;
             ViewData["Category"] = "Smart Phones";
 
@@ -27,40 +28,22 @@ namespace ShopApp.WebUI.Controllers
         }
 
         // localhost:5000/Product/List
-        public IActionResult List()
+        public IActionResult List(int? id)
         {
-
-            var products = new List<Product>()
+            var products = ProductRepository.Products;
+            if (id != null)
             {
-                new Product() {Id = 1, Name = "Galaxy S10", Price = 600, Description = "Good phone", IsApproved = false},
-                new Product() {Id = 2, Name = "Galaxy S20", Price = 800, Description = "Very nice phone", IsApproved = true},
-                new Product() {Id = 2, Name = "Xioami Mi 10", Price = 800, Description = "Incredible phone", IsApproved = true}
-            };
-
-            var categories = new List<Category>()
-            {
-                new Category(){Id = 1, Name = "Cell Phones", Description = "This is category of cell Phones."},
-                new Category(){Id = 2, Name = "Television", Description = "This is category of television."},
-                new Category(){Id = 3, Name = "Computers", Description = "This is category of Computers.",},
-                new Category(){Id = 4, Name = "Tablets", Description = "This is category of Tablets.",},
-                new Category(){Id = 5, Name = "Components", Description = "This is category of Components."},
-                
-                }; 
-
-
-            //ViewBag.Category = category;
-            var productViewModel = new ProductViewModel(){Categories = categories, Products = products};
+                products = products.Where(p => p.CategoryId == id).ToList();
+            }
+            
+            var productViewModel = new ProductViewModel(){Products = products};
             return View(productViewModel);
         }
 
         // localhost:5000/Product/Details
         public IActionResult Details(int id)
         {
-            var product = new Product();
-            product.Id = 1;
-            product.Name = "Samsung Galaxy S20";
-            product.Price = 7000;
-            product.Description = "Nice smartphone";
+            var product = ProductRepository.GetProductById(id);
             return View(product);
         }
     }

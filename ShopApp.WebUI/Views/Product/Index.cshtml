@@ -1,41 +1,8 @@
-﻿@model Product
-@{
-    ViewBag.Title = "title";
-    //Layout = "_Layout";
+﻿@* Categories*@
+@section Categories
+{
+    @await Component.InvokeAsync("Categories")
 }
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
-    @await Html.PartialAsync("_Navbar")
-    <h1>Category Name : @ViewData["Category"] </h1>
-    <h1>Name : @(((Product)ViewData["Product"]).Name) </h1>
-    <h1>Price: @(((Product)ViewData["Product"]).Price)</h1>
-    <h1>Description: @(((Product)ViewData["Product"]).Description)</h1>
-    <br />
-    <h1>Category Name : @ViewBag.Category</h1>
-    <h1>Name: @(((Product)ViewBag.Product).Name))</h1>
-    <h1>Price: @(((Product)ViewBag.Product).Price)</h1>
-    <h1>Description: @(((Product)ViewBag.Product).Description)</h1>
-    <br />
-    <h1>Category Name : @ViewBag.Category</h1>
-    <h1>Name: @ViewBag.Product.Name</h1>
-    <h1>Price: @ViewBag.Product.Price</h1>
-    <h1>Description: @ViewBag.Product.Description</h1>
-    <br />
-
-    <h1>Category Name : @ViewBag.Category</h1>
-    <h1>Name: @Model.Name</h1>
-    <h1>Price: @Model.Price</h1>
-    <h1>Description: @Model.Description</h1>
-
-</body>
-
-</html>
+@* Product Index *@
+Product Index
