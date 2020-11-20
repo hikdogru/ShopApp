@@ -1,8 +1,4 @@
-﻿
-@*
-    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model Product
+﻿@model Product
 
 <div class="card mb-3">
     <img class="card-img-top"
@@ -14,7 +10,21 @@
             @Model.Description
         </p>
         @* <a href="/Product/Details/@Model.ProductId" class="btn btn-primary">View</a>
-            Aşağıdaki kullanımımla aynı işi görür.*@
-        <a asp-controller="Product" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-primary">View</a>
+        Aşağıdaki kullanımımla aynı işi görür.*@
+        <a asp-controller="Product" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-primary btn-sm">
+            <i class="fa fa-eye"></i> View
+        </a>
+        <a asp-controller="Product" asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-secondary btn-sm">
+            <i class="fa fa-pencil" aria-hidden="true"></i> Edit
+        </a>
+
+        <form action="/Product/Delete" method="post" style="display: inline">
+            <input type="hidden" name="productId" value="@Model.ProductId">
+            <button type="submit" class="btn btn-danger btn-sm">
+                <i class="fa fa-trash" aria-hidden="true"></i>
+                Delete
+            </button>
+        </form>
     </div>
 </div>
+
