@@ -4,7 +4,7 @@
 
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>_Layout</title>
+    <title>ShopApp</title>
     <link rel="stylesheet" href="/modules/bootstrap/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -19,54 +19,19 @@
 
 <body>
 
-    @* MessageBox bölümü sayfada varsa *@
-    @if (IsSectionDefined("MessageBox"))
-    {
-        @* Sayfalarda bu bölümün zorunlu olmaması için false yazdık.
-            ContentPlaceHolder benzeri bir yapı.*@
-        @* @RenderSection("MessageBox", false) *@
-        @* if ile kontrol ettiğimiz için false değerine gerek kalmadı. *@
-        @RenderSection("MessageBox")
-    }
-    else
-    {
-        <div class="alert alert-primary text-center m-0">
-            Welcome!
-        </div>
-    }
-
-
-
     @await Html.PartialAsync("_Navbar")
 
-    @RenderSection("Header", false)
+
     @*@await Html.PartialAsync("_Header")*@
 
 
     <main class="my-3">
         <div class="container">
-            @if (IsSectionDefined("Categories"))
-            {
-                <div class="row">
-                    <div class="col-md-3">
-                        @* Categories*@
-                        @RenderSection("Categories", false)
-                    </div>
-
-                    <div class="col-md-9">
-                        @* Products *@
-                        @RenderBody()
-                    </div>
+            <div class="row">
+                <div class="col-md-12">
+                    @RenderBody()
                 </div>
-            }
-            else
-            {
-                <div class="row">
-                    <div class="col-md-12">
-                        @RenderBody()
-                    </div>
-                </div>
-            }
+            </div>
 
         </div>
     </main>

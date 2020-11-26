@@ -1,5 +1,5 @@
 ﻿img {
-  object-fit: contain;
+  object-fit: scale-down;
 
   width: 300px;
   height: 337px;

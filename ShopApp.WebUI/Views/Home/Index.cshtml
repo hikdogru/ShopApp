@@ -1,24 +1,9 @@
-﻿@model ProductViewModel
-@{
-    ViewBag.Title = "title";
-    Layout = "_Layout";
-
-    var popularClass = Model.Products.Count > 1 ? "popular" : "";
-    var products = Model.Products;
-}
+﻿@model ProductListViewModel
 
 
-@section MessageBox
-{
-    <div class="alert alert-warning text-center m-0">
-        You have a message!
-    </div>
-}
 
-@section Header
-{
-    <partial name="_Header" /> @* Partial View kullanımının alternatifi *@
-}
+<partial name="_Header" /> @* Partial View kullanımının alternatifi *@
+
 
 
 @* Products *@
@@ -31,7 +16,7 @@ else
 {
 
     <div class="row">
-        @foreach (var product in products)
+        @foreach (var product in Model.Products)
         {
 
             <div class="col-md-3">

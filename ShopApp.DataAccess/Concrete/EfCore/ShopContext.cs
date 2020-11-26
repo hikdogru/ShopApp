@@ -15,5 +15,10 @@ namespace ShopApp.DataAccess.Concrete.EfCore
         {
             optionsBuilder.UseSqlServer(@"Data Source=ACER\MSSQLSERVER01;Initial Catalog=ShopDb;Integrated Security=true;");
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ProductCategory>().HasKey(c => new { c.CategoryId, c.ProductId });
+        }
     }
 }

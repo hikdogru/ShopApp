@@ -3,19 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ShopApp.WebUI.Data;
-using ShopApp.WebUI.Models;
+using ShopApp.Business.Abstract;
 using ShopApp.WebUI.ViewModels;
+using ShopApp.DataAccess.Abstract;
 
 namespace ShopApp.WebUI.Controllers
 {
     public class HomeController : Controller
     {
+        private IProductService _productService;
+        public HomeController(IProductService productService)
+        {
+            this._productService = productService;
+        }
         // localhost:5000/Home/Index
         public IActionResult Index()
         {
 
-            var productViewModel = new ProductViewModel() { Products = ProductRepository.Products };
+            var productViewModel = new ProductListViewModel() { Products = _productService.GetAll()};
             return View(productViewModel);
         }
         // localhost:5000/Home/About

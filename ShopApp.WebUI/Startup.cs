@@ -9,6 +9,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
+using ShopApp.Business.Abstract;
+using ShopApp.Business.Concrete;
+using ShopApp.DataAccess.Abstract;
+using ShopApp.DataAccess.Concrete.EfCore;
 
 namespace ShopApp.WebUI
 {
@@ -18,6 +22,12 @@ namespace ShopApp.WebUI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ICategoryRepository, EfCoreCategoryRepository>();
+            services.AddScoped<ICategoryService, CategoryManager>();
+            
+            services.AddScoped<IProductRepository, EfCoreProductRepository>();
+            
+            services.AddScoped<IProductService, ProductManager>();
             services.AddControllersWithViews();
         }
 
@@ -33,7 +43,9 @@ namespace ShopApp.WebUI
             });
             if (env.IsDevelopment())
             {
+                SeedDatabase.Seed();
                 app.UseDeveloperExceptionPage();
+
             }
 
             app.UseRouting();

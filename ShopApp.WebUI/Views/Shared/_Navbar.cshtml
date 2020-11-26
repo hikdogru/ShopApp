@@ -1,25 +1,31 @@
 ﻿<div class="navbar navbar-light navbar-expand-sm" style="background-color: #c5cbe3;">
     <div class="container">
-        <ul class="navbar-nav">
+        <a href="/" class="navbar-brand">ShopApp</a>
+        <ul class="navbar-nav mr-auto">
+            
             <li class="nav-item">
-                <a class="navbar-brand" href="#">
-                    <img src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
-                        style="width: 30px;height: 30px;" alt="">
-                </a>
-            </li>
-            <li class="nav-item">
-                <a href="/Product/List" class="nav-link">
+                <a asp-controller="Shop" asp-action="List" class="nav-link">
                     Products
                 </a>
             </li>
             <li class="nav-item">
                 <a href="/Product/Create" class="nav-link">
+                    Cart
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/Product/Create" class="nav-link">
+                    Orders
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-controller="Admin" asp-action="CreateProduct" class="nav-link">
                     Add Product
                 </a>
             </li>
             <li class="nav-item">
-                <a href="" class="nav-link">
-                    Link3
+                <a asp-controller="Admin" asp-action="ProductList" class="nav-link">
+                    Admin Products
                 </a>
             </li>
         </ul>

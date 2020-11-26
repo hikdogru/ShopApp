@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using ShopApp.WebUI.Models;
+using ShopApp.Entity;
 
 namespace ShopApp.WebUI.ViewModels
 {
-    public class ProductViewModel
+    public class ProductListViewModel
     {
         public List<Product> Products { get; set; }
     }

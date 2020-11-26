@@ -29,14 +29,14 @@
         <span asp-validation-for="ImageUrl" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    @* <div class="form-group">
         <label for="categoryId">Category Id</label>
         <select asp-for="CategoryId" asp-items="@ViewBag.Categories" id="categoryId" class="form-control">
             <option selected disabled>All Categories</option>
         </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
 
-    </div>
+    </div> *@
 
     <button type="submit" class="btn btn-primary">Save</button>
 
