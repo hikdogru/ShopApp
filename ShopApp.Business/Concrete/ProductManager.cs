@@ -19,7 +19,14 @@ namespace ShopApp.Business.Concrete
 
         public Product GetById(int id)
         {
-            throw new System.NotImplementedException();
+            var product = _productRepository.GetById(id);
+            return product;
+        }
+
+        public List<Product> GetProductsByCategory(string categoryName)
+        {
+            var products = _productRepository.GetProductsByCategory(categoryName);
+            return products;
         }
 
         public List<Product> GetAll()
@@ -43,6 +50,12 @@ namespace ShopApp.Business.Concrete
         {
             // İş kuralları uygula
             _productRepository.Create(entity);
+        }
+
+        public Product GetProductDetails(string url)
+        {
+            var productDetails = _productRepository.GetProductDetails(url);
+            return productDetails;
         }
     }
 }

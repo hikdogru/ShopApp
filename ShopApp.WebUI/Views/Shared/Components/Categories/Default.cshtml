@@ -1,12 +1,11 @@
-﻿@* Product/List/2 *@
+﻿@model List<Category>
+@* Product/List/2 *@
 <div class="list-group">
-    <a href="/Product/List" class="list-group-item list-group-item-action">All Categories</a>
-    <a href="/Product/List" class="list-group-item list-group-item-action">Cell Phone</a>
-    <a href="/Product/List" class="list-group-item list-group-item-action">Computer</a>
-
-    @* @foreach (var category in Model)
+    <a href="/Products" class="list-group-item list-group-item-action">All Categories</a>
+    
+     @foreach (var item in Model)
         {
-        <a asp-controller="Product" asp-action="List" asp-route-id="@category.CategoryId" class="list-group-item
-        list-group-item-action @(ViewBag.SelectedCategory == category.CategoryId.ToString()?"active":"")">@category.Name</a>
-        } *@
+        <a asp-controller="Shop" asp-action="List" asp-route-category="@item.Url" class="list-group-item
+        list-group-item-action @(ViewBag.SelectedCategory == item.Url?"active":"")">@item.Name</a>
+        } 
 </div>

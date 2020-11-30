@@ -1,0 +1,39 @@
+@model ProductDetailModel
+@* Categories*@
+@* @section Categories
+    {
+    @await Component.InvokeAsync("Categories")
+    } *@
+
+
+@* Details *@
+
+
+<div class="row">
+    <div class="col-md-3">
+        <img src="~/img/@Model.Product.ImageUrl" alt="Image Product" class="img-fluid">
+    </div>
+    <div class="col-md-9">
+
+        <h1 class="card-title">@Model.Product.Name</h1>
+        @foreach (var item in @Model.Categories)
+        {
+            <a asp-controller="Shop" asp-action="List" asp-route-category="@item.Url" class="btn btn-link p-0 mb-3">@item.Name</a>
+        }
+        <div class="mb-3">
+
+            <h4 class="text-primary mb-3">
+                <i class="fa fa-usd" aria-hidden="true"></i>@Model.Product.Price
+            </h4>
+            <button type="submit" class="btn btn-warning btn-lg">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to Cart</button>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <p class="p-3">@Model.Product.Description</p>
+
+    </div>
+</div>
