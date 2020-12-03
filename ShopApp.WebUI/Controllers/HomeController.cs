@@ -20,7 +20,7 @@ namespace ShopApp.WebUI.Controllers
         public IActionResult Index()
         {
 
-            var productViewModel = new ProductListViewModel() { Products = _productService.GetAll()};
+            var productViewModel = new ProductListViewModel() { Products = _productService.GetHomePageProducts()};
             return View(productViewModel);
         }
         // localhost:5000/Home/About

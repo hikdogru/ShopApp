@@ -4,28 +4,37 @@
 
 <partial name="_Header" /> @* Partial View kullanımının alternatifi *@
 
-
-
-@* Products *@
-
-@if (Model.Products.Count == 0)
-{
-    <partial name="_NoProduct" />
-}
-else
-{
-
-    <div class="row">
-        @foreach (var product in Model.Products)
-        {
-
-            <div class="col-md-3">
-                @await Html.PartialAsync("_Product", product)
-            </div>
-        }
-
+<div class="row">
+    <div class="col-md-3">
+        @await Component.InvokeAsync("Categories")
+        <partial name="_Search" />
     </div>
-}
+
+
+
+    @* Products *@
+
+    @if (Model.Products.Count == 0)
+    {
+        <partial name="_NoProduct" />
+    }
+    else
+    {
+        <div class="col-md-9">
+            <div class="row">
+                @foreach (var product in Model.Products)
+                {
+
+                    <div class="col-md-4">
+                        @await Html.PartialAsync("_Product", product)
+                    </div>
+                }
+
+            </div>
+        </div>
+
+    }
+</div>
 
 
 @section Scripts

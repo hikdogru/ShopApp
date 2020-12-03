@@ -23,10 +23,15 @@ namespace ShopApp.Business.Concrete
             return product;
         }
 
-        public List<Product> GetProductsByCategory(string categoryName)
+        public List<Product> GetProductsByCategory(string categoryName,int page,int pageSize)
         {
-            var products = _productRepository.GetProductsByCategory(categoryName);
+            var products = _productRepository.GetProductsByCategory(categoryName,page,pageSize);
             return products;
+        }
+
+        public List<Product> GetSearchResult(string searchString)
+        {
+            return _productRepository.GetSearchResult(searchString);
         }
 
         public List<Product> GetAll()
@@ -39,6 +44,11 @@ namespace ShopApp.Business.Concrete
         {
             // İş kuralları uygula
             _productRepository.Delete(entity);
+        }
+
+        public int GetCountByCategory(string category)
+        {
+            return _productRepository.GetCountByCategory(category);
         }
 
         public void Update(Product entity)
@@ -56,6 +66,11 @@ namespace ShopApp.Business.Concrete
         {
             var productDetails = _productRepository.GetProductDetails(url);
             return productDetails;
+        }
+
+        public List<Product> GetHomePageProducts()
+        {
+            return _productRepository.GetHomePageProducts();
         }
     }
 }

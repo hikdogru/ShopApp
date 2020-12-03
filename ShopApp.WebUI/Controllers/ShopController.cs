@@ -16,9 +16,23 @@ namespace ShopApp.WebUI.Controllers
         {
             this._productService = productService;
         }
-        public IActionResult List(string category)
+        // localhost/Products/Cell-Phone?page=1
+        public IActionResult List(string category, int page = 1)
         {
-            var productViewModel = new ProductListViewModel() { Products = _productService.GetProductsByCategory(category) };
+
+            const int pageSize = 3; // Bir sayfada ne kadar ürünün gösterileceğini belirtir.
+            var productViewModel = new ProductListViewModel()
+            {
+                PageInfo = new PageInfo()
+                {
+                    TotalItems = _productService.GetCountByCategory(category),
+                    CurrentPage = page,
+                    ItemsPerPage = pageSize,
+                    CurrentCategory = category
+                },
+                Products = _productService.GetProductsByCategory(category, page, pageSize)
+
+            };
             return View(productViewModel);
         }
 
@@ -38,6 +52,16 @@ namespace ShopApp.WebUI.Controllers
                 Product = product,
                 Categories = product.ProductCategories.Select(c => c.Category).ToList()
             });
+        }
+
+        public IActionResult Search(string q)
+        {
+            var products = _productService.GetSearchResult(q);
+            var productViewModel = new ProductListViewModel()
+            {
+                Products = products
+            };
+            return View(productViewModel);
         }
     }
 }

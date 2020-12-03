@@ -4,7 +4,7 @@
         <ul class="navbar-nav mr-auto">
 
             <li class="nav-item">
-                <a href="/Products" class="nav-link">
+                <a asp-controller="Shop" asp-action="List" class="nav-link">
                     Products
                 </a>
             </li>
@@ -30,11 +30,6 @@
             </li>
         </ul>
 
-        <form action="/Product/List" class="form-inline my-2 my-lg-0">
-            <input name="q" class="form-control mr-sm-2" type="search" aria-label="Search">
-
-            <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">
-                <i class="fa fa-search" aria-hidden="true"></i></button>
-        </form>
+        
     </div>
 </div>

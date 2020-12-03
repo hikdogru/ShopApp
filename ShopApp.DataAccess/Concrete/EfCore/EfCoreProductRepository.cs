@@ -15,6 +15,23 @@ namespace ShopApp.DataAccess.Concrete.EfCore
             return null;
         }
 
+        public int GetCountByCategory(string category)
+        {
+            using (var context = new ShopContext())
+            {
+                var products = context.Products.Where(p => p.IsApproved).AsQueryable();
+                if (!String.IsNullOrEmpty(category))
+                {
+                    products = context.Products
+                        .Include(p => p.ProductCategories)
+                        .ThenInclude(p => p.Category)
+                        .Where(p => p.ProductCategories.Any(p => p.Category.Url == category));
+
+                }
+                return products.Count();
+            }
+        }
+
         public Product GetProductDetails(string url)
         {
             using (var context = new ShopContext())
@@ -25,11 +42,11 @@ namespace ShopApp.DataAccess.Concrete.EfCore
             };
         }
 
-        public List<Product> GetProductsByCategory(string categoryName)
+        public List<Product> GetProductsByCategory(string categoryName, int page, int pageSize)
         {
             using (var context = new ShopContext())
             {
-                var products = context.Products.AsQueryable();
+                var products = context.Products.Where(p => p.IsApproved).AsQueryable();
                 if (!String.IsNullOrEmpty(categoryName))
                 {
                     products = context.Products
@@ -38,7 +55,28 @@ namespace ShopApp.DataAccess.Concrete.EfCore
                         .Where(p => p.ProductCategories.Any(p => p.Category.Url == categoryName));
 
                 }
+                return products.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            }
+        }
+
+        public List<Product> GetSearchResult(string searchString)
+        {
+            using (var context = new ShopContext())
+            {
+                var products = context
+                    .Products
+                    .Where(p => p.IsApproved && (p.Name.Contains(searchString)) || (p.Description.Contains(searchString)))
+                    .AsQueryable();
                 return products.ToList();
+            }
+        }
+
+        public List<Product> GetHomePageProducts()
+        {
+            using (var context = new ShopContext())
+            {
+                var homePageProducts = context.Products.Where(p => p.IsApproved && p.IsHome);
+                return homePageProducts.ToList();
             }
         }
     }

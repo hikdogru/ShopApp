@@ -1,0 +1,29 @@
+﻿@model ProductListViewModel
+<div class="row">
+    <div class="col-md-3">
+        @await Component.InvokeAsync("Categories")
+    </div>
+    <div class="col-md-9">
+        @* Products *@
+
+        @* Ürün yoksa uyarı veriyor.*@
+        @if (Model.Products.Count == 0)
+        {
+            <partial name="_NoProduct" />
+        }
+        else
+        {
+
+            <div class="row">
+                @foreach (var product in @Model.Products)
+                {
+
+                    <div class="col-md-4">
+                        @await Html.PartialAsync("_Product", product)
+                    </div>
+                }
+
+            </div>
+        }
+    </div>
+</div>
