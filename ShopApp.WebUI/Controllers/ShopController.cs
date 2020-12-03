@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ShopApp.Business.Abstract;
-using ShopApp.WebUI.ViewModels;
 using ShopApp.WebUI.Models;
+
 
 namespace ShopApp.WebUI.Controllers
 {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ShopApp.Business.Abstract;
-using ShopApp.WebUI.ViewModels;
+using ShopApp.WebUI.Models;
 using ShopApp.DataAccess.Abstract;
 
 namespace ShopApp.WebUI.Controllers
@@ -20,7 +20,7 @@ namespace ShopApp.WebUI.Controllers
         public IActionResult Index()
         {
 
-            var productViewModel = new ProductListViewModel() { Products = _productService.GetHomePageProducts()};
+            var productViewModel = new ProductListViewModel() { Products = _productService.GetHomePageProducts() };
             return View(productViewModel);
         }
         // localhost:5000/Home/About

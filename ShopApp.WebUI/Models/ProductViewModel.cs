@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ShopApp.Entity;
+using ShopApp.WebUI.Models;
 
-namespace ShopApp.WebUI.ViewModels
+namespace ShopApp.WebUI.Models
 {
 
     public class ProductListViewModel
