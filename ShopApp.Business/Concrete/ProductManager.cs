@@ -53,7 +53,7 @@ namespace ShopApp.Business.Concrete
 
         public void Update(Product entity)
         {
-            throw new System.NotImplementedException();
+            _productRepository.Update(entity);
         }
 
         public void Create(Product entity)

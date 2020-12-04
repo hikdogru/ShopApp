@@ -1,17 +1,20 @@
 ﻿@model ProductListViewModel
 
 
+
 <div class="row">
     <div class="col-md-12">
         <h1>Admin Products</h1>
         <hr>
-        <table class="table table-striped">
+        <table class="table table-striped table-bordered">
             <thead>
                 <tr>
                     <th>Id</th>
                     <th>Image</th>
                     <th>Name</th>
                     <th>Price</th>
+                    <th>Home</th>
+                    <th>Approved</th>
                     <th></th>
                 </tr>
             </thead>
@@ -24,19 +27,45 @@
 
                             <td style="width: 30px;">@product.ProductId</td>
                             <td style="width: 100px;"><img src="~/img/@product.ImageUrl" style="width: 80px; height: 150px;" /></td>
-                            <td>@product.Name</td>
+                            <td >@product.Name</td>
                             <td style="width: 20px;">@product.Price</td>
-                            <td>
-                                <a href="/Admin/Products/@product.ProductId" class="btn btn-primary btn-sm mr-2">Edit</a>
-                                <a href="#" class="btn btn-danger btn-sm">Delete</a>
+                            <td style="width: 20px;">
+                                @if (product.IsHome)
+                                {
+                                <i class="fa fa-check-circle text-success" aria-hidden="true"></i>
+                                }
+                                else
+                                {
+                                <i class="fa fa-times-circle text-danger" aria-hidden="true"></i>
+                                }
                             </td>
+                            <td style="width: 20px;">
+                                @if (product.IsApproved)
+                                {
+                                    <i class="fa fa-check-circle text-success" aria-hidden="true"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa fa-times-circle text-danger" aria-hidden="true"></i>
+                                }
+                            </td>
+                            <td>
+                                <a asp-controller="Admin" asp-action="EditProduct" asp-route-id="@product.ProductId" class="btn btn-primary btn-sm mr-2">Edit</a>
+                                <form action="/Admin/DeleteProduct" method="POST" style="display: inline;">
+                                    <input type="hidden" name="productId" value="@product.ProductId">
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+
+                                </form>
+
+                            </td>
+
                         </tr>
                     }
                 }
 
                 else
                 {
-                <partial name="_NoProduct"/>
+                    <partial name="_NoProduct" />
                 }
 
 
