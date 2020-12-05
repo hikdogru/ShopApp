@@ -1,11 +1,11 @@
 ﻿@model ProductModel
 
 <h1 class="h3">Edit Product</h1>
+<form asp-controller="Admin" asp-action="ProductEdit" method="POST">
 
-<div class="row">
-    <div class="col-md-8">
-        
-        <form asp-controller="Admin" asp-action="EditProduct" method="POST">
+    <div class="row">
+        <div class="col-md-8">
+
             <input type="hidden" asp-for="ProductId">
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Name</label>
@@ -49,8 +49,25 @@
             </div>
 
 
-        </form>
-        
-        
+
+
+
+        </div>
+        <div class="col-md-4">
+            @foreach (var item in (List<Category>)ViewBag.Categories)
+            {
+                <div class="custom-control custom-checkbox mb-3">
+
+                    <input type="checkbox" class="custom-control-input"
+                           id="category_@(item.CategoryId)" name="categoryIds"
+                           value="@item.CategoryId"
+                           @(Model.SelectedCategories.Any(i => i.CategoryId == item.CategoryId) ? "checked" : "")>
+                    <label class="custom-control-label" for="category_@(item.CategoryId)">@item.Name</label>
+
+                </div>
+
+            }
+
+        </div>
     </div>
-</div>
+</form>

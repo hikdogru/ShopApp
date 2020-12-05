@@ -20,6 +20,6 @@ namespace ShopApp.WebUI.Models
         public bool IsHome { get; set; }
 
         public bool IsApproved { get; set; }
-        public List<ProductCategory> ProductCategories { get; set; }
+        public List<Category> SelectedCategories { get; set; }
     }
 }

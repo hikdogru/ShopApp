@@ -4,7 +4,7 @@
         <ul class="navbar-nav mr-auto">
 
             <li class="nav-item">
-                <a href="/Products" class="nav-link">
+                <a asp-controller="Shop" asp-action="List" class="nav-link">
                     Products
                 </a>
             </li>
@@ -19,13 +19,13 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a asp-controller="Admin" asp-action="CreateProduct" class="nav-link">
-                    Add Product
+                <a href="/Admin/Products" class="nav-link">
+                    Admin Products
                 </a>
             </li>
             <li class="nav-item">
-                <a href="/Admin/Products" class="nav-link">
-                    Admin Products
+                <a href="/Admin/Categories" class="nav-link">
+                    Admin Categories
                 </a>
             </li>
         </ul>

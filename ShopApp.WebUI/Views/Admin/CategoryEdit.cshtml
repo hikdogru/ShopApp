@@ -1,0 +1,90 @@
+﻿@model CategoryModel
+
+<h1 class="h3">Edit Category</h1>
+
+<div class="row">
+    <div class="col-md-4">
+
+        <form asp-controller="Admin" asp-action="CategoryEdit" method="POST">
+            <input type="hidden" asp-for="CategoryId">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="Name">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Url" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input class="form-control" asp-for="Url">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-sm-10 offset-sm-2">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-striped table-sm table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Products.Count > 0)
+                        {
+                            @foreach (var product in @Model.Products)
+                            {
+
+
+                                <tr>
+
+                                    <td style="width: 30px;">@product.ProductId</td>
+                                    <td style="width: 100px;"><img src="~/img/@product.ImageUrl" style="width: 80px; height: 150px;" /></td>
+                                    <td>@product.Name</td>
+                                    <td style="width: 20px;">@product.Price</td>
+                                    <td>
+                                        <a asp-controller="Admin" asp-action="ProductEdit" asp-route-id="@product.ProductId" class="btn btn-secondary btn-sm mr-2">Edit</a>
+                                        <form action="/Admin/DeleteFromCategory" method="POST" style="display: inline;">
+                                            <input type="hidden" name="productId" value="@product.ProductId">
+                                            <input type="hidden" name="categoryId" value="@Model.CategoryId">
+                                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+
+                            }
+                        }
+                        else
+                        {
+                            <partial name="_NoProduct" />
+
+                        }
+
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

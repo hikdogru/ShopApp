@@ -15,6 +15,18 @@ namespace ShopApp.DataAccess.Concrete.EfCore
             return null;
         }
 
+        public Product GetByIdWithCategories(int productId)
+        {
+            using (var context = new ShopContext())
+            {
+                var list = context.Products
+                    .Where(p => p.ProductId == productId)
+                    .Include(p => p.ProductCategories)
+                    .ThenInclude(p => p.Category).FirstOrDefault();
+                return list;
+            }
+        }
+
         public int GetCountByCategory(string category)
         {
             using (var context = new ShopContext())
@@ -29,6 +41,33 @@ namespace ShopApp.DataAccess.Concrete.EfCore
 
                 }
                 return products.Count();
+            }
+        }
+
+        public void Update(Product entity, int[] categoryIds)
+        {
+            using (var context = new ShopContext())
+            {
+                var product = context.Products
+                    .Include(p => p.ProductCategories)
+                    .FirstOrDefault(p => p.ProductId == entity.ProductId);
+
+                if (product != null)
+                {
+                    product.Name = entity.Name;
+                    product.Price = entity.Price;
+                    product.Description = entity.Description;
+                    product.ImageUrl = entity.ImageUrl;
+                    product.Url = entity.Url;
+
+                    product.ProductCategories = categoryIds.Select(id => new ProductCategory()
+                    {
+                        ProductId = entity.ProductId,
+                        CategoryId = id
+                    }).ToList();
+
+                    context.SaveChanges();
+                }
             }
         }
 

@@ -40,6 +40,11 @@ namespace ShopApp.Business.Concrete
             return productList;
         }
 
+        public void Update(Product entity, int[] categoryIds)
+        {
+            _productRepository.Update(entity, categoryIds);
+        }
+
         public void Delete(Product entity)
         {
             // İş kuralları uygula
@@ -49,6 +54,11 @@ namespace ShopApp.Business.Concrete
         public int GetCountByCategory(string category)
         {
             return _productRepository.GetCountByCategory(category);
+        }
+
+        public Product GetByIdWithCategories(int productId)
+        {
+            return _productRepository.GetByIdWithCategories(productId);
         }
 
         public void Update(Product entity)
