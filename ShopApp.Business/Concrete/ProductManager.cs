@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using ShopApp.Business.Abstract;
@@ -23,9 +24,9 @@ namespace ShopApp.Business.Concrete
             return product;
         }
 
-        public List<Product> GetProductsByCategory(string categoryName,int page,int pageSize)
+        public List<Product> GetProductsByCategory(string categoryName, int page, int pageSize)
         {
-            var products = _productRepository.GetProductsByCategory(categoryName,page,pageSize);
+            var products = _productRepository.GetProductsByCategory(categoryName, page, pageSize);
             return products;
         }
 
@@ -38,11 +39,6 @@ namespace ShopApp.Business.Concrete
         {
             var productList = _productRepository.GetAll();
             return productList;
-        }
-
-        public void Update(Product entity, int[] categoryIds)
-        {
-            _productRepository.Update(entity, categoryIds);
         }
 
         public void Delete(Product entity)
@@ -61,15 +57,43 @@ namespace ShopApp.Business.Concrete
             return _productRepository.GetByIdWithCategories(productId);
         }
 
-        public void Update(Product entity)
+        public bool Update(Product entity)
         {
-            _productRepository.Update(entity);
+            if (Validation(entity))
+            {
+                _productRepository.Update(entity);
+                return true;
+            }
+
+            return false;
         }
 
-        public void Create(Product entity)
+        public bool Update(Product entity, int[] categoryIds)
+        {
+            if (Validation(entity))
+            {
+                if (categoryIds.Length == 0)
+                {
+                    ErrorMessage += "You must choose a category!";
+                    return false;
+                }
+                _productRepository.Update(entity, categoryIds);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Create(Product entity)
         {
             // İş kuralları uygula
-            _productRepository.Create(entity);
+            if (Validation(entity))
+            {
+                _productRepository.Create(entity);
+                return true;
+            }
+
+            return false;
         }
 
         public Product GetProductDetails(string url)
@@ -81,6 +105,25 @@ namespace ShopApp.Business.Concrete
         public List<Product> GetHomePageProducts()
         {
             return _productRepository.GetHomePageProducts();
+        }
+
+        public string ErrorMessage { get; set; }
+        public bool Validation(Product entity)
+        {
+            var isValid = true;
+            if (string.IsNullOrEmpty(entity.Name))
+            {
+                ErrorMessage += "You must enter product name!\n";
+                isValid = false;
+            }
+
+            if (entity.Price < 0)
+            {
+                ErrorMessage += "The product price is not negative!\n";
+                isValid = false;
+            }
+
+            return isValid;
         }
     }
 }

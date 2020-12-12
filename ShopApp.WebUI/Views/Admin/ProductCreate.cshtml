@@ -1,13 +1,20 @@
 ﻿<h1 class="h3">Create Product</h1>
+<style>
+    span {
+        display: inline-block;
+    }
+</style>
 @model ProductModel
 
 <div class="row">
     <div class="col-md-8">
         <form asp-controller="Admin" asp-action="ProductCreate" method="POST">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group row">
                 <label class="col-sm-2 col-form-label">Name</label>
                 <div class="col-sm-10">
                     <input class="form-control" asp-for="Name">
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
 
@@ -15,13 +22,15 @@
                 <label asp-for="Url" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
                     <input class="form-control" asp-for="Url">
+                    <span asp-validation-for="Url" class="text-danger"></span>
                 </div>
             </div>
 
             <div class="form-group row">
                 <label asp-for="Description" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
-                    <textarea class="form-control" asp-for="Description"></textarea>
+                    <textarea id="editor" class="form-control" asp-for="Description" maxlength="500"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
             </div>
 
@@ -29,13 +38,14 @@
                 <label asp-for="Price" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" asp-for="Price">
+                    <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
             </div>
             <div class="form-group row">
                 <label asp-for="ImageUrl" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" asp-for="ImageUrl">
-
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
                 </div>
             </div>
 
@@ -49,3 +59,14 @@
         </form>
     </div>
 </div>
+
+@section Scripts
+{
+
+    <script src="/modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+    <script src="/modules/ckeditor/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('editor');
+    </script>
+}

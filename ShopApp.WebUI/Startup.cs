@@ -8,11 +8,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using ShopApp.Business.Abstract;
 using ShopApp.Business.Concrete;
 using ShopApp.DataAccess.Abstract;
 using ShopApp.DataAccess.Concrete.EfCore;
+using ShopApp.WebUI.Identity;
 
 namespace ShopApp.WebUI
 {
@@ -22,6 +25,12 @@ namespace ShopApp.WebUI
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationContext>(options =>
+                options.UseSqlServer(
+                    @"Data Source=ACER\MSSQLSERVER01;Initial Catalog=ShopDb;Integrated Security=true;"));
+            services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
+
             services.AddScoped<ICategoryRepository, EfCoreCategoryRepository>();
             services.AddScoped<ICategoryService, CategoryManager>();
 
@@ -48,6 +57,7 @@ namespace ShopApp.WebUI
 
             }
 
+            app.UseAuthentication();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>

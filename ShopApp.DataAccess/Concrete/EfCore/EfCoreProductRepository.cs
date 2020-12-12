@@ -59,7 +59,8 @@ namespace ShopApp.DataAccess.Concrete.EfCore
                     product.Description = entity.Description;
                     product.ImageUrl = entity.ImageUrl;
                     product.Url = entity.Url;
-
+                    product.IsApproved = entity.IsApproved;
+                    product.IsHome = entity.IsHome;
                     product.ProductCategories = categoryIds.Select(id => new ProductCategory()
                     {
                         ProductId = entity.ProductId,

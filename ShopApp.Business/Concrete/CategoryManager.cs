@@ -49,5 +49,11 @@ namespace ShopApp.Business.Concrete
         {
             _categoryRepository.Update(entity);
         }
+
+        public string ErrorMessage { get; set; }
+        public bool Validation(Category entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

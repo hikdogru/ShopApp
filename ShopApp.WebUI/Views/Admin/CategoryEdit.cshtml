@@ -6,11 +6,14 @@
     <div class="col-md-4">
 
         <form asp-controller="Admin" asp-action="CategoryEdit" method="POST">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <input type="hidden" asp-for="CategoryId">
+
             <div class="form-group row">
-                <label class="col-sm-2 col-form-label">Name</label>
+                <label asp-for="Name" class="col-sm-2 col-form-label">Name</label>
                 <div class="col-sm-10">
                     <input class="form-control" asp-for="Name">
+                    <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
             </div>
 
@@ -18,6 +21,7 @@
                 <label asp-for="Url" class="col-sm-2 col-form-label"></label>
                 <div class="col-sm-10">
                     <input class="form-control" asp-for="Url">
+                    <span asp-validation-for="Url" class="text-danger"></span>
                 </div>
             </div>
 
@@ -27,6 +31,17 @@
                 </div>
             </div>
 
+            @*<div id="products">
+                @for (int i = 0; i < Model.Products.Count; i++)
+                {
+                    <input type="hidden" name="Model.Products[@i].ProductId" value="@Model.Products[i].ProductId" />
+                    <input type="hidden" name="Model.Products[@i].Name" value="@Model.Products[i].Name" />
+                    <input type="hidden" name="Model.Products[@i].ImageUrl" value="@Model.Products[i].ImageUrl" />
+                    <input type="hidden" name="Model.Products[@i].Price" value="@Model.Products[i].Price" />
+                    <input type="hidden" name="Model.Products[@i].IsApproved" value="@Model.Products[i].IsApproved.ToString()" />
+                    <input type="hidden" name="Model.Products[@i].IsHome" value="@Model.Products[i].IsHome.ToString()"/>
+                }
+            </div>*@
 
         </form>
 
@@ -88,3 +103,10 @@
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+
+    <script src="/modules/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="/modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+}
