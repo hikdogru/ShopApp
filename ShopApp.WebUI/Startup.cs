@@ -31,6 +31,45 @@ namespace ShopApp.WebUI
             services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
 
+            services.Configure<IdentityOptions>(options =>
+            {// Identity ayarları
+                // Password
+                options.Password.RequireDigit = true; // Parola içinde rakam olacak
+                options.Password.RequireLowercase = true; // Parola içinde küçük harf olacak
+                options.Password.RequireUppercase = true; // Parola içinde büyük harf olacak
+                options.Password.RequiredLength = 6; // Parola uzunluğu minimum 6 karakter
+                options.Password.RequireNonAlphanumeric = true;
+
+                // Lockout
+                options.Lockout.MaxFailedAccessAttempts = 5; // Kullanıcı 5 kere şifresini yanlış girerse hesap kilitlenir.
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Hesap kilitlendikten 5 dk sonra açılır.
+                options.Lockout.AllowedForNewUsers = true; // Lockout özelliği aktif edildi.
+
+
+                //options.User.AllowedUserNameCharacters = "";
+                options.User.RequireUniqueEmail = true; // true ise => Aynı mail adresiyle iki kullanıcı oluşamaz.
+                options.SignIn.RequireConfirmedEmail = false; //true ise Kullanıcı kayıt olduktan sonra email mesajından hesabını onaylaması gerekiyor. 
+                options.SignIn.RequireConfirmedPhoneNumber = false; // Kullanıcı hesabı onayı için telefonuna mesaj gidecek.
+
+
+            });
+
+            // Cookie ayarları
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login"; // Login sayfası
+                options.LogoutPath = "/Account/Logout"; // Logout sayfası
+                options.AccessDeniedPath = "/Account/AccessDenied"; // Erişim engellendi sayfası
+                options.SlidingExpiration = true; // Her istek yapıldığında 20 dk sıfırlanır. Tekrar 20 dk hak verir. false olursa sadece 20 dk süre vardır.
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60); // 1 saat sonra tekrar login olmak gerekiyor. Eğer 59. dk'de istek yapılırsa tekrar 1 saat hak veriliyor. 
+                options.Cookie = new CookieBuilder
+                {
+                    HttpOnly = true,
+                    Name = ".ShopApp.Security.Cookie" //Cookie ismi tanımladık
+
+                };
+            });
+
             services.AddScoped<ICategoryRepository, EfCoreCategoryRepository>();
             services.AddScoped<ICategoryService, CategoryManager>();
 
@@ -59,7 +98,7 @@ namespace ShopApp.WebUI
 
             app.UseAuthentication();
             app.UseRouting();
-
+            app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

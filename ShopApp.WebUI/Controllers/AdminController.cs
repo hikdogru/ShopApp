@@ -13,9 +13,11 @@ using ShopApp.Business.Abstract;
 using ShopApp.Entity;
 using ShopApp.WebUI.Models;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ShopApp.WebUI.Controllers
 {
+    [Authorize] // Yetkilendirilmiş kullanıcı olması gerekiyor
     public class AdminController : Controller
     {
         private IProductService _productService;
