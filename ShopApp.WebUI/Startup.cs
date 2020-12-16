@@ -16,11 +16,22 @@ using ShopApp.Business.Concrete;
 using ShopApp.DataAccess.Abstract;
 using ShopApp.DataAccess.Concrete.EfCore;
 using ShopApp.WebUI.Identity;
+using ShopApp.WebUI.EmailServices;
+using Microsoft.Extensions.Configuration;
 
 namespace ShopApp.WebUI
 {
     public class Startup
     {
+        // App settingse ulaşmak için yazıldı.
+        private IConfiguration _configuration;
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
+
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
@@ -48,7 +59,7 @@ namespace ShopApp.WebUI
 
                 //options.User.AllowedUserNameCharacters = "";
                 options.User.RequireUniqueEmail = true; // true ise => Aynı mail adresiyle iki kullanıcı oluşamaz.
-                options.SignIn.RequireConfirmedEmail = false; //true ise Kullanıcı kayıt olduktan sonra email mesajından hesabını onaylaması gerekiyor. 
+                options.SignIn.RequireConfirmedEmail = true; //true ise Kullanıcı kayıt olduktan sonra email mesajından hesabını onaylaması gerekiyor. 
                 options.SignIn.RequireConfirmedPhoneNumber = false; // Kullanıcı hesabı onayı için telefonuna mesaj gidecek.
 
 
@@ -65,8 +76,8 @@ namespace ShopApp.WebUI
                 options.Cookie = new CookieBuilder
                 {
                     HttpOnly = true,
-                    Name = ".ShopApp.Security.Cookie" //Cookie ismi tanımladık
-
+                    Name = ".ShopApp.Security.Cookie", //Cookie ismi tanımladık
+                    SameSite = SameSiteMode.Strict //Csrf Token
                 };
             });
 
@@ -74,8 +85,20 @@ namespace ShopApp.WebUI
             services.AddScoped<ICategoryService, CategoryManager>();
 
             services.AddScoped<IProductRepository, EfCoreProductRepository>();
-
             services.AddScoped<IProductService, ProductManager>();
+
+            services.AddScoped<IEmailSender, SmtpEmailSender>(i =>
+            new SmtpEmailSender(
+                _configuration["EmailSender:Host"],
+                // GetValue<int> ile gelen değeri int türüne çevirdik
+                _configuration.GetValue<int>("EmailSender:Port"),
+                _configuration.GetValue<bool>("EmailSender:EnableSSL"),
+                _configuration["EmailSender:UserName"],
+                _configuration["EmailSender:Password"])
+
+
+            );
+
             services.AddControllersWithViews();
         }
 
@@ -101,6 +124,18 @@ namespace ShopApp.WebUI
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                   name: "AdminRoleList",
+                   pattern: "Admin/Role/List",
+                   defaults: new { controller = "Admin", action = "RoleList" }
+               );
+
+                endpoints.MapControllerRoute(
+                    name: "AdminRoleCreate",
+                    pattern: "Admin/Role/Create",
+                    defaults: new { controller = "Admin", action = "RoleCreate" }
+                );
+
                 endpoints.MapControllerRoute(
                     name: "AdminCategoryList",
                     pattern: "Admin/Categories",

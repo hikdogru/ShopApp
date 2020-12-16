@@ -29,15 +29,9 @@
         <div class="container">
             @if (TempData["message"] != null)
             {
-                var message = JsonConvert.DeserializeObject<AlertMessage>(TempData["message"] as String).Message;
-                var alertType = JsonConvert.DeserializeObject<AlertMessage>(TempData["message"] as String).AlertType;
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="alert alert-@alertType">
-                            @message
-                        </div>
-                    </div>
-                </div>     
+                //var message = JsonConvert.DeserializeObject<AlertMessage>(TempData["message"] as String).Message;
+                //var alertType = JsonConvert.DeserializeObject<AlertMessage>(TempData["message"] as String).AlertType;
+                <partial name="_ResultMessage" model="@(TempData.Get<AlertMessage>("Message"))"></partial>
             }
             @RenderBody()
         </div>

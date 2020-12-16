@@ -14,6 +14,9 @@ using ShopApp.Entity;
 using ShopApp.WebUI.Models;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Microsoft.AspNetCore.Authorization;
+using ShopApp.WebUI.Extensions;
+using Microsoft.AspNetCore.Identity;
+using ShopApp.WebUI.Identity;
 
 namespace ShopApp.WebUI.Controllers
 {
@@ -22,14 +25,51 @@ namespace ShopApp.WebUI.Controllers
     {
         private IProductService _productService;
         private ICategoryService _categoryService;
+        private RoleManager<IdentityRole> _roleManager;
+        private UserManager<User> _userManager;
 
-
-        public AdminController(IProductService productService, ICategoryService categoryService)
+        public AdminController(IProductService productService, ICategoryService categoryService, RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
         {
             _productService = productService;
             _categoryService = categoryService;
+            _roleManager = roleManager;
+            _userManager = userManager;
         }
+        public IActionResult RoleList()
+        {
+            var roleList = _roleManager.Roles;
+            return View(roleList);
+        }
+        [HttpGet]
+        public IActionResult RoleCreate()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> RoleCreate(RoleModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                var result = await _roleManager.CreateAsync(new IdentityRole(){
+                    Name = model.Name
+                });
 
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("RoleList");
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+            }
+
+
+            return View(model);
+        }
         public IActionResult ProductList()
         {
             return View(new ProductListViewModel()
@@ -61,13 +101,25 @@ namespace ShopApp.WebUI.Controllers
                 };
                 if (_productService.Create(entity))
                 {
+                    TempData.Put("message", new AlertMessage()
+                    {
+                        Title = "Success",
+                        Message = $"The product name {entity.Name} added.",
+                        AlertType = "success"
+                    });
+
                     // View kullansaydık ViewData kullanabilirdik.
                     // TempData için mesajı Json'a çevirdik.
                     //Mesaj oluşturmak için metot yazdık.
-                    CreateMessage($"The product name {entity.Name} added.","success");
+                    // CreateMessage($"The product name {entity.Name} added.","success");
                     return RedirectToAction("ProductList");
                 }
-                CreateMessage(_productService.ErrorMessage, "danger");
+                TempData.Put("message", new AlertMessage()
+                {
+                    Title = "Danger",
+                    Message = _productService.ErrorMessage,
+                    AlertType = "danger"
+                });
                 return View(model);
             }
 
@@ -128,7 +180,7 @@ namespace ShopApp.WebUI.Controllers
                 entity.IsApproved = model.IsApproved;
                 entity.IsHome = model.IsHome;
 
-                if (file!=null)
+                if (file != null)
                 {
                     var extension = Path.GetExtension(file.FileName);// Resmin uzantısını alıyoruz.
                     var randomName = string.Format($"{Guid.NewGuid()}{extension}");// Guid ile benzersiz isim üretiyoruz.
@@ -142,15 +194,26 @@ namespace ShopApp.WebUI.Controllers
 
 
 
-                if (_productService.Update(entity,categoryIds))
+                if (_productService.Update(entity, categoryIds))
                 {
+                    TempData.Put("message", new AlertMessage()
+                    {
+                        Title = "Success",
+                        Message = $"The product name {entity.Name} updated.",
+                        AlertType = "success"
+                    });
                     // View kullansaydık ViewData kullanabilirdik.
                     // TempData için mesajı Json'a çevirdik.
                     //Mesaj oluşturmak için metot yazdık.
-                    CreateMessage($"The product name {entity.Name} updated.", "success");
+                    //CreateMessage($"The product name {entity.Name} updated.", "success");
                     return RedirectToAction("ProductList");
                 }
-                CreateMessage(_productService.ErrorMessage, "danger");
+                TempData.Put("message", new AlertMessage()
+                {
+                    Title = "Danger",
+                    Message = _productService.ErrorMessage,
+                    AlertType = "danger"
+                });
             }
             ViewBag.Categories = _categoryService.GetAll();
             return View(model);
@@ -163,13 +226,13 @@ namespace ShopApp.WebUI.Controllers
             {
                 _productService.Delete(entity);
             }
-
-            var msj = new AlertMessage()
+            TempData.Put("message", new AlertMessage()
             {
-                AlertType = "danger",
-                Message = $"The product name {entity.Name} deleted!"
-            };
-            TempData["message"] = JsonConvert.SerializeObject(msj);
+                Title = "Error",
+                Message = $"The product name {entity.Name} deleted!",
+                AlertType = "danger"
+            });
+
             return RedirectToAction("ProductList");
         }
 
@@ -196,13 +259,13 @@ namespace ShopApp.WebUI.Controllers
                     Url = model.Url
                 };
                 _categoryService.Create(entity);
-                var msg = new AlertMessage()
+                TempData.Put("message", new AlertMessage()
                 {
-                    AlertType = "success",
-                    Message = $"The category name {entity.Name} added."
-                };
+                    Title = "Success",
+                    Message = $"The category name {entity.Name} added.",
+                    AlertType = "success"
+                });
 
-                TempData["message"] = JsonConvert.SerializeObject(msg);
                 return RedirectToAction("CategoryList");
             }
 
@@ -252,14 +315,12 @@ namespace ShopApp.WebUI.Controllers
                 entity.Name = model.Name;
                 entity.Url = model.Url;
                 _categoryService.Update(entity);
-
-                var msg = new AlertMessage()
+                TempData.Put("message", new AlertMessage()
                 {
-                    AlertType = "success",
-                    Message = $"Category name {entity.Name} modified."
-                };
-
-                TempData["message"] = JsonConvert.SerializeObject(msg);
+                    Title = "Success",
+                    Message = $"Category name {entity.Name} modified.",
+                    AlertType = "success"
+                });
 
                 return RedirectToAction("CategoryList");
             }
@@ -276,13 +337,12 @@ namespace ShopApp.WebUI.Controllers
             {
                 _categoryService.Delete(entity);
             }
-
-            var msj = new AlertMessage()
+            TempData.Put("message", new AlertMessage()
             {
-                AlertType = "danger",
-                Message = $"The category name {entity.Name} deleted!"
-            };
-            TempData["message"] = JsonConvert.SerializeObject(msj);
+                Title = "Danger",
+                Message = $"The category name {entity.Name} deleted!",
+                AlertType = "danger"
+            });
             return RedirectToAction("CategoryList");
         }
         [HttpPost]
@@ -291,9 +351,9 @@ namespace ShopApp.WebUI.Controllers
             _categoryService.DeleteFromCategory(productId, categoryId);
             return Redirect("/Admin/Categories/" + categoryId);
         }
-        
+
         //message => mesajın içeriği, alertType ise uyarı mesajının class ismi. danger, success vb
-        void CreateMessage(string message, string alertType)
+        private void CreateMessage(string message, string alertType)
         {
             var msj = new AlertMessage()
             {
