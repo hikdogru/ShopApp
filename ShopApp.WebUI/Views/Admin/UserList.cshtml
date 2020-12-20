@@ -1,0 +1,80 @@
+﻿@model IEnumerable<User>
+
+@section Styles
+{
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap5.min.css">
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 class="h3">User List</h1>
+        <hr>
+        <a href="/Admin/User/Create" class="btn btn-primary btn-sm">
+            Create User
+        </a>
+        <hr>
+        <table class="table table-striped table-bordered mt-3" id="userTable">
+            <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th style="width: 100px;">User Name</th>
+                <th>Email</th>
+                <th style="width: 130px;">Email Confirmed</th>
+                <th style="width: 80px;" class="text-center">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (Model.Count() > 0)
+            {
+                @foreach (var user in Model)
+                {
+                    <tr class="@(user.EmailConfirmed ? "" : "bg-warning")">
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.UserName</td>
+                        <td>@user.Email</td>
+                        <td class="text-center">
+                            <h4>
+                                <span class="badge bg-@(user.EmailConfirmed ? "success" : "danger") text-white">@user.EmailConfirmed</span>
+                            </h4>
+                        </td>
+
+                        <td style="width: 160px;" class="text-center">
+                            <a href="/Admin/User/@user.Id" class="btn btn-secondary btn-sm mr-2">Edit</a>
+                            <form action="/Admin/User/Delete" method="POST" style="display: inline;">
+                                <input type="hidden" name="userId" value="@user.Id">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+
+                            </form>
+
+                        </td>
+
+                    </tr>
+                }
+            }
+
+            else
+            {
+                <partial name="_NoUser"/>
+            }
+
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="//cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#userTable').DataTable();
+        });
+    </script>
+}

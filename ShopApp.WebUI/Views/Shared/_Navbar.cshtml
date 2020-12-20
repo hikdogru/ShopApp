@@ -8,29 +8,44 @@
                     Products
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="/Product/Create" class="nav-link">
-                    Cart
-                </a>
-            </li>
+
             @if (User.Identity.IsAuthenticated)
             {
-                
                 <li class="nav-item">
-                    <a href="/Product/Create" class="nav-link">
+                    <a href="/Product/Cart" class="nav-link">
+                        Cart
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="/Product/Orders" class="nav-link">
                         Orders
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/Admin/Products" class="nav-link">
-                        Admin Products
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/Admin/Categories" class="nav-link">
-                        Admin Categories
-                    </a>
-                </li>
+                @if (User.IsInRole("admin"))
+                {
+                    <li class="nav-item">
+                        <a href="/Admin/Products" class="nav-link">
+                            Admin Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/Categories" class="nav-link">
+                            Admin Categories
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/Role/List" class="nav-link">
+                            Admin Roles
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/Admin/User/List" class="nav-link">
+                            Admin Users
+                        </a>
+                    </li>
+                }
+
             }
         </ul>
 

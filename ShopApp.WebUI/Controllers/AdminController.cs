@@ -20,7 +20,7 @@ using ShopApp.WebUI.Identity;
 
 namespace ShopApp.WebUI.Controllers
 {
-    [Authorize] // Yetkilendirilmiş kullanıcı olması gerekiyor
+    [Authorize(Roles = "admin")] // Yetkilendirilmiş kullanıcı olması gerekiyor
     public class AdminController : Controller
     {
         private IProductService _productService;
@@ -35,6 +35,74 @@ namespace ShopApp.WebUI.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
         }
+
+        public IActionResult UserList()
+        {
+            var userList = _userManager.Users;
+            return View(userList);
+        }
+        public async Task<IActionResult> UserEdit(string id)
+        {
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                var selectedRoles = await _userManager.GetRolesAsync(user);
+                var roleList = _roleManager.Roles.Select(i => i.Name);
+                ViewBag.Roles = roleList;
+
+                return View(new UserDetailsModel()
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    EmailConfirmed = user.EmailConfirmed,
+                    SelectedRoles = selectedRoles
+
+                });
+            }
+
+
+
+            return View("~/Admin/User/List");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UserEdit(UserDetailsModel model, string[] selectedRoles)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.UserId);
+                if (user != null)
+                {
+
+                    user.UserName = model.UserName;
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+                    user.Email = model.Email;
+                    user.EmailConfirmed = model.EmailConfirmed;
+
+
+                    var result = await _userManager.UpdateAsync(user);
+                    if (result.Succeeded)
+                    {
+                        var userRoles = await _userManager.GetRolesAsync(user);
+                        // Null reference hatası almamk için yazdık.
+                        selectedRoles = selectedRoles ?? new string[] { };
+                        // Kullanıcının seçmiş olduğu rolü veritabanında yoksa ekliyoruz.
+                        await _userManager.AddToRolesAsync(user, selectedRoles.Except(userRoles).ToArray<string>());
+                        await _userManager.RemoveFromRolesAsync(user, userRoles.Except(selectedRoles).ToArray<string>());
+                        return Redirect("/Admin/User/List");
+                    }
+                    return Redirect("/Admin/User/List");
+
+                }
+            }
+
+            return View(model);
+        }
         public IActionResult RoleList()
         {
             var roleList = _roleManager.Roles;
@@ -48,9 +116,10 @@ namespace ShopApp.WebUI.Controllers
         [HttpPost]
         public async Task<IActionResult> RoleCreate(RoleModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                var result = await _roleManager.CreateAsync(new IdentityRole(){
+                var result = await _roleManager.CreateAsync(new IdentityRole()
+                {
                     Name = model.Name
                 });
 
@@ -63,8 +132,74 @@ namespace ShopApp.WebUI.Controllers
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError("", error.Description);
+
                     }
                 }
+            }
+
+
+            return View(model);
+        }
+        public async Task<IActionResult> RoleEdit(string id)
+        {
+            var role = await _roleManager.FindByIdAsync(id);
+            var members = new List<User>();
+            var nonMembers = new List<User>();
+            foreach (var user in _userManager.Users.ToList())
+            {
+                // kullanıcının rolü olanlar members olmayanlar nonMembers listesine referans verilecek.
+                var list = await _userManager.IsInRoleAsync(user, role.Name) ? members : nonMembers;
+
+                // Hangi listeye referans verildiyse o listeye kullanıcı ekleniyor.
+                list.Add(user);
+            }
+
+            var model = new RoleDetails()
+            {
+                Role = role,
+                Members = members,
+                NonMembers = nonMembers
+            };
+            return View(model);
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> RoleEdit(RoleEditModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                foreach (var userId in model.IdsToAdd ?? new string[] { })
+
+                {
+                    var user = await _userManager.FindByIdAsync(userId);
+                    if (user != null)
+                    {
+                        var result = await _userManager.AddToRoleAsync(user, model.RoleName);
+                        if (!result.Succeeded)
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                            }
+                        }
+                    }
+                }
+                foreach (var userId in model.IdsToDelete ?? new string[] { })
+                {
+                    var user = await _userManager.FindByIdAsync(userId);
+                    if (user != null)
+                    {
+                        var result = await _userManager.RemoveFromRoleAsync(user, model.RoleName);
+                        if (!result.Succeeded)
+                        {
+                            foreach (var error in result.Errors)
+                            {
+                                ModelState.AddModelError("", error.Description);
+                            }
+                        }
+                    }
+                }
+                return Redirect("/Admin/Role/" + model.RoleId);
             }
 
 
@@ -362,6 +497,7 @@ namespace ShopApp.WebUI.Controllers
             };
             TempData["message"] = JsonConvert.SerializeObject(msj);
         }
+
 
     }
 }

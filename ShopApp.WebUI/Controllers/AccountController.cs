@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -11,6 +12,7 @@ namespace ShopApp.WebUI.Controllers
 {
     // Tüm post metotlarında [ValidateAntiForgeryToken] yazmak yerine bunu yazabiliriz.
     [AutoValidateAntiforgeryToken]
+    //[Authorize]
     public class AccountController : Controller
     {
 
@@ -23,6 +25,8 @@ namespace ShopApp.WebUI.Controllers
             _signInManager = signInManager;
             _emailSender = emailSender;
         }
+        // Tüm kişiler login ekranına erişebilir
+        //[AllowAnonymous]
         [HttpGet]
         public IActionResult Login(string ReturnUrl = null)
         {
@@ -73,6 +77,8 @@ namespace ShopApp.WebUI.Controllers
             }
             return View(model);
         }
+        // Tüm kişiler register ekranına erişebilir
+        //[AllowAnonymous]
         [HttpGet]
         public IActionResult Register()
         {
@@ -118,7 +124,7 @@ namespace ShopApp.WebUI.Controllers
             {
                 Title = "Warning",
                 Message = "The session is closed.",
-                        AlertType = "warning"
+                AlertType = "warning"
             });
             await _signInManager.SignOutAsync();
             return Redirect("~/");
@@ -164,6 +170,8 @@ namespace ShopApp.WebUI.Controllers
             });
             return View();
         }
+        // Tüm kişiler şifremi unuttum ekranına erişebilir
+        //[AllowAnonymous]
         [HttpGet]
         public IActionResult ForgotPassword()
         {
@@ -197,7 +205,7 @@ namespace ShopApp.WebUI.Controllers
         {
             if (userId == null || token == null)
             {
-                return RedirectToAction("Home", "Index");
+                return RedirectToAction("Index", "Home");
             }
             var model = new ResetPasswordModel() { Token = token };
             return View();
@@ -220,6 +228,11 @@ namespace ShopApp.WebUI.Controllers
                 return RedirectToAction("Login", "Account");
             }
             return View(model);
+        }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
         }
 
     }

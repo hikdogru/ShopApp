@@ -103,7 +103,8 @@ namespace ShopApp.WebUI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        // configuration, userManager ve roleManager sonradan eklendi.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,IConfiguration configuration,UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
@@ -123,7 +124,20 @@ namespace ShopApp.WebUI
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
+
             {
+                endpoints.MapControllerRoute(
+                    name: "AdminUserList",
+                    pattern: "Admin/User/List",
+                    defaults: new { controller = "Admin", action = "UserList" }
+                );
+
+                endpoints.MapControllerRoute(
+                    name: "AdminUserEdit",
+                    pattern: "Admin/User/{id?}",
+                    defaults: new { controller = "Admin", action = "UserEdit" }
+                );
+
                 endpoints.MapControllerRoute(
                    name: "AdminRoleList",
                    pattern: "Admin/Role/List",
@@ -134,6 +148,12 @@ namespace ShopApp.WebUI
                     name: "AdminRoleCreate",
                     pattern: "Admin/Role/Create",
                     defaults: new { controller = "Admin", action = "RoleCreate" }
+                );
+
+                endpoints.MapControllerRoute(
+                    name: "AdminRoleEdit",
+                    pattern: "Admin/Role/{id?}",
+                    defaults: new { controller = "Admin", action = "RoleEdit" }
                 );
 
                 endpoints.MapControllerRoute(
@@ -195,6 +215,7 @@ namespace ShopApp.WebUI
                  pattern: "{controller=Home}/{action=Index}/{id?}"
                 );
             });
+            SeedIdentity.Seed(userManager,roleManager, configuration).Wait();
         }
     }
 }
