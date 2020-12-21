@@ -7,10 +7,10 @@ namespace ShopApp.Entity
         public Product Product { get; set; }
         public int CartId { get; set; }
         public Cart Cart { get; set; }
-        public int Quantiy { get; set; }
-        
-        
-        
-        
+        public int Quantity { get; set; }
+
+
+
+
     }
 }

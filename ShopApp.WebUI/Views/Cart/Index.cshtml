@@ -1,0 +1,75 @@
+@model CartModel
+
+@section Styles{
+<style>
+  img.cartImage {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+</style>
+}
+<h1 class="h3">Shopping Cart</h1>
+
+@if(Model.CartItems.Count()>0)
+{
+<div class="row">
+  <div class="col-md-12">
+    <table id="cart" class="table table-hover table-condensed">
+      <thead>
+        <tr>
+          <th style="width:50%">Product</th>
+          <th style="width:10%">Price</th>
+          <th style="width:8%">Quantity</th>
+          <th style="width:22%" class="text-center">Subtotal</th>
+          <th style="width:10%"></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        @foreach (var cartItem in @Model.CartItems)
+        {
+        <tr>
+          <td data-th="Product">
+            <div class="row">
+              <div class="col-sm-2 hidden-xs">
+                <img src="/img/@cartItem.ImageUrl" alt="Cart Image" class="img-responsive cartImage" />
+              </div>
+              <div class="col-sm-10">
+                <h4 class="nomargin">@cartItem.Name</h4>
+              </div>
+            </div>
+          </td>
+          <td data-th="Price">$@cartItem.Price</td>
+          <td data-th="Quantity">
+            <input type="number" class="form-control text-center" value="@cartItem.Quantity" min="1" step="1">
+          </td>
+          <td data-th="Subtotal" class="text-center">@((cartItem.Quantity * cartItem.Price).ToString("c"))</td>
+          <td class="actions" data-th="">
+            <button class="btn btn-info btn-sm"><i class="fa fa-refresh"></i></button>
+            <form asp-controller="Cart" asp-action="DeleteFromCart" method="POST">
+              <input type="hidden" name="productId" value="@cartItem.ProductId">
+              <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
+            </form>
+          </td>
+        </tr>
+
+        }
+      </tbody>
+      <tfoot>
+        <tr>
+          <td><a href="/" class="btn btn-warning btn-sm"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
+          <td colspan="2" class="hidden-xs"></td>
+          <td class="hidden-xs text-center"><strong>Total @(Model.TotalPrice().ToString("c"))</strong></td>
+          <td><a href="#" class="btn btn-success btn-sm">Checkout <i class="fa fa-angle-right"></i></a></td>
+        </tr>
+
+      </tfoot>
+    </table>
+  </div>
+</div>
+}
+else
+{
+<partial name="_NoCart"></partial>
+}

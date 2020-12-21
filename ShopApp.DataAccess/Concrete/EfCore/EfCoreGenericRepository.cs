@@ -38,7 +38,8 @@ namespace ShopApp.DataAccess.Concrete.EfCore
             }
         }
 
-        public void Update(TEntity entity)
+        // override olması için virtual yazdık
+        public virtual void Update(TEntity entity)
         {
             using (var context = new TContext())
             {

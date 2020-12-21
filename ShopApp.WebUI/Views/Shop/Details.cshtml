@@ -18,15 +18,28 @@
         <h1 class="card-title">@Model.Product.Name</h1>
         @foreach (var item in @Model.Categories)
         {
-            <a asp-controller="Shop" asp-action="List" asp-route-category="@item.Url" class="btn btn-link p-0 mb-3">@item.Name</a>
+            <a asp-controller="Shop" asp-action="List" asp-route-category="@item.Url"
+                class="btn btn-link p-0 mb-3">@item.Name</a>
         }
         <div class="mb-3">
 
             <h4 class="text-primary mb-3">
                 <i class="fa fa-usd" aria-hidden="true"></i>@Model.Product.Price
             </h4>
-            <button type="submit" class="btn btn-warning btn-lg">
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to Cart</button>
+            <form asp-controller="Cart" asp-action="AddToCart" method="POST" class="form-inline">
+                <input type="hidden" name="productId" value="@Model.Product.ProductId">
+                <div class="input-group mb-3">
+                    <input type="number" class="form-control mr-1" name="quantity" value="1" min="1" step="1"
+                        style="width: 100px;">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fa fa-shopping-cart"> Add to Cart</i>
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+
 
         </div>
     </div>

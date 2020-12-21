@@ -86,6 +86,9 @@ namespace ShopApp.WebUI
 
             services.AddScoped<IProductRepository, EfCoreProductRepository>();
             services.AddScoped<IProductService, ProductManager>();
+            
+            services.AddScoped<ICartRepository,EfCoreCartRepository>();
+            services.AddScoped<ICartService,CartManager>();
 
             services.AddScoped<IEmailSender, SmtpEmailSender>(i =>
             new SmtpEmailSender(
@@ -126,6 +129,12 @@ namespace ShopApp.WebUI
             app.UseEndpoints(endpoints =>
 
             {
+                 endpoints.MapControllerRoute(
+                    name: "Cart",
+                    pattern: "Cart",
+                    defaults: new { controller = "Cart", action = "Index" }
+                );
+
                 endpoints.MapControllerRoute(
                     name: "AdminUserList",
                     pattern: "Admin/User/List",
