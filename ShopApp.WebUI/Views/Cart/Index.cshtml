@@ -47,7 +47,7 @@
           <td data-th="Subtotal" class="text-center">@((cartItem.Quantity * cartItem.Price).ToString("c"))</td>
           <td class="actions" data-th="">
             <button class="btn btn-info btn-sm"><i class="fa fa-refresh"></i></button>
-            <form asp-controller="Cart" asp-action="DeleteFromCart" method="POST">
+            <form asp-controller="Cart" asp-action="DeleteFromCart" method="POST" style="display:inline">
               <input type="hidden" name="productId" value="@cartItem.ProductId">
               <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash-o"></i></button>
             </form>
@@ -61,7 +61,7 @@
           <td><a href="/" class="btn btn-warning btn-sm"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
           <td colspan="2" class="hidden-xs"></td>
           <td class="hidden-xs text-center"><strong>Total @(Model.TotalPrice().ToString("c"))</strong></td>
-          <td><a href="#" class="btn btn-success btn-sm">Checkout <i class="fa fa-angle-right"></i></a></td>
+          <td><a href="/Cart/Checkout" class="btn btn-success btn-sm">Checkout <i class="fa fa-angle-right"></i></a></td>
         </tr>
 
       </tfoot>
