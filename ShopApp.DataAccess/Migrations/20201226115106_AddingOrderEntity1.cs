@@ -2,7 +2,7 @@
 
 namespace ShopApp.DataAccess.Migrations
 {
-    public partial class addRecordProductIsHome : Migration
+    public partial class AddingOrderEntity1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

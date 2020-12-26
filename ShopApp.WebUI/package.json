@@ -6,6 +6,7 @@
   "dependencies": {
     "bootstrap": "^4.5.3",
     "ckeditor": "^4.12.1",
+    "iyzipay": "^2.0.48",
     "jquery-validation": "^1.19.2",
     "jquery-validation-unobtrusive": "^3.2.11"
   },

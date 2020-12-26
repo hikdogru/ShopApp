@@ -2,16 +2,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Iyzipay;
+using Iyzipay.Model;
+using Iyzipay.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Newtonsoft.Json;
 using ShopApp.Business.Abstract;
 using ShopApp.Entity;
 using ShopApp.WebUI.Identity;
 using ShopApp.WebUI.Models;
-using Stripe;
-using Stripe.Checkout;
+using OrderItem = ShopApp.Entity.OrderItem;
 
 
 namespace ShopApp.WebUI.Controllers
@@ -22,10 +25,12 @@ namespace ShopApp.WebUI.Controllers
         public string sessionId = "";
         private ICartService _cartService;
         private UserManager<User> _userManager;
-        public CartController(ICartService cartService, UserManager<User> userManager)
+        private IOrderService _orderService;
+        public CartController(ICartService cartService, UserManager<User> userManager, IOrderService orderService)
         {
             _cartService = cartService;
             _userManager = userManager;
+            _orderService = orderService;
         }
 
         public IActionResult Index()
@@ -88,36 +93,178 @@ namespace ShopApp.WebUI.Controllers
             return View(orderModel);
         }
         [HttpPost]
-        public IActionResult Checkout(string stripeEmail,string stripeToken)
+        public IActionResult Checkout(OrderModel model)
         {
-            var customers= new CustomerService();
-            var charges = new ChargeService();
-            var customer = customers.Create(new CustomerCreateOptions()
+            if (ModelState.IsValid)
             {
-                Email = stripeEmail,
-                Source = stripeToken
-            });
-
-            var charge = charges.Create(new ChargeCreateOptions()
-            {
-                Amount = 400,
-                Description = "Test Payment",
-                Currency = "try",
-                Customer = customer.Id,
-                ReceiptEmail = stripeEmail,
-                Metadata = new Dictionary<string, string>()
+                var userId = _userManager.GetUserId(User);
+                var cart = _cartService.GetCartByUserId(userId);
+                model.CartModel = new CartModel()
                 {
-                    {"OrderId","111"},
-                    {"Postcode","Lewewewe"}
-                }
-            });
-            if (charge.Status =="succeedeed")
-            {
-                string balanceTransactionId = charge.BalanceTransactionId;
-            }
-            
+                    CartId = cart.Id,
+                    CartItems = cart.CartItems.Select(i => new CartItemModel()
+                    {
+                        CartItemId = i.Id,
+                        Name = i.Product.Name,
+                        ProductId = i.ProductId,
+                        Price = (double)i.Product.Price,
+                        ImageUrl = i.Product.ImageUrl,
+                        Quantity = i.Quantity
 
-            return View();
+                    }).ToList()
+                };
+
+                var payment = PaymentProcess(model);
+
+                if (payment.Status == "success")
+                {
+                    SaveOrder(model, payment, userId);
+                    ClearCart(model.CartModel.CartId);
+                    return View("Success");
+                }
+
+                else
+                {
+                    var msg = new AlertMessage()
+                    {
+                        Message = $"{payment.ErrorMessage}",
+                        AlertType = "danger"
+                    };
+                    TempData["message"] = JsonConvert.SerializeObject(msg);
+                }
+            }
+
+
+            return View(model);
+
+        }
+
+        private void ClearCart(int userId)
+        {
+            _cartService.ClearCart(userId);
+        }
+
+        private void SaveOrder(OrderModel model, Payment payment, string userId)
+        {
+            var order = new Order()
+            {
+                OrderNumber = new Random().Next(111111, 999999).ToString(),
+                OrderState = OrderState.Completed,
+                PaymentType = PaymentType.CreditCard,
+                PaymentId = payment.PaymentId,
+                ConversationId = payment.ConversationId,
+                OrderDate = new DateTime(),
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Address = model.Address,
+                City = model.City,
+                State = model.State,
+                Email = model.Email,
+                Phone = model.Phone,
+                UserId = userId,
+                Note = model.Note
+            };
+
+            // null hatası almamak için ekledik.
+            order.OrderItems = new List<OrderItem>();
+            foreach (var item in model.CartModel.CartItems)
+            {
+                var orderItem = new OrderItem()
+                {
+                    Price = item.Price,
+                    Quantity = item.Quantity,
+                    ProductId = item.ProductId
+                };
+
+                order.OrderItems.Add(orderItem);
+            }
+            _orderService.Create(order);
+
+        }
+
+        private Payment PaymentProcess(OrderModel model)
+        {
+            var options = new Options();
+            options.ApiKey = "sandbox-gwStHikGW6JEQ5bOJVvbLExsBXV4fu3u";
+            options.SecretKey = "sandbox-m0ODmF5tHTEJMW0wnBgspDayDODcDZFN";
+            options.BaseUrl = "https://sandbox-api.iyzipay.com";
+
+            // Buraya
+
+            // gelecek
+
+            CreatePaymentRequest request = new CreatePaymentRequest();
+            request.Locale = Locale.TR.ToString();
+            request.ConversationId = new Random().Next(111111, 999999).ToString();
+            request.Price = model.CartModel.TotalPrice().ToString();
+            request.PaidPrice = model.CartModel.TotalPrice().ToString();
+            request.Currency = Currency.TRY.ToString();
+            request.Installment = 1;
+            request.BasketId = "B67832";
+            request.PaymentChannel = PaymentChannel.WEB.ToString();
+            request.PaymentGroup = PaymentGroup.PRODUCT.ToString();
+
+            PaymentCard paymentCard = new PaymentCard();
+            paymentCard.CardHolderName = "John Doe";
+            paymentCard.CardNumber = "5528790000000008";
+            paymentCard.ExpireMonth = "12";
+            paymentCard.ExpireYear = "2030";
+            paymentCard.Cvc = "123";
+            paymentCard.RegisterCard = 0;
+            request.PaymentCard = paymentCard;
+
+            Buyer buyer = new Buyer();
+            buyer.Id = "BY789";
+            buyer.Name = "John";
+            buyer.Surname = "Doe";
+            buyer.GsmNumber = "+905350000000";
+            buyer.Email = "email@email.com";
+            buyer.IdentityNumber = "74300864791";
+            buyer.LastLoginDate = "2015-10-05 12:43:35";
+            buyer.RegistrationDate = "2013-04-21 15:12:09";
+            buyer.RegistrationAddress = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
+            buyer.Ip = "85.34.78.112";
+            buyer.City = "Istanbul";
+            buyer.Country = "Turkey";
+            buyer.ZipCode = "34732";
+            request.Buyer = buyer;
+
+            Address shippingAddress = new Address();
+            shippingAddress.ContactName = "Jane Doe";
+            shippingAddress.City = "Istanbul";
+            shippingAddress.Country = "Turkey";
+            shippingAddress.Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
+            shippingAddress.ZipCode = "34742";
+            request.ShippingAddress = shippingAddress;
+
+            Address billingAddress = new Address();
+            billingAddress.ContactName = "Jane Doe";
+            billingAddress.City = "Istanbul";
+            billingAddress.Country = "Turkey";
+            billingAddress.Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
+            billingAddress.ZipCode = "34742";
+            request.BillingAddress = billingAddress;
+
+
+
+            List<BasketItem> basketItems = new List<BasketItem>();
+            BasketItem basketItem;
+            foreach (var cartItem in model.CartModel.CartItems)
+            {
+                basketItem = new BasketItem()
+                {
+                    Id = cartItem.ProductId.ToString(),
+                    Name = cartItem.Name,
+                    Category1 = "Technologic device",
+                    Price = (cartItem.Price * cartItem.Quantity).ToString(),
+                };
+                basketItem.ItemType = BasketItemType.PHYSICAL.ToString();
+                basketItems.Add(basketItem);
+            }
+            request.BasketItems = basketItems;
+
+            return Payment.Create(request, options);
+
         }
     }
 }

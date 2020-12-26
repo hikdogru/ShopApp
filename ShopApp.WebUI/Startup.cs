@@ -20,7 +20,6 @@ using ShopApp.WebUI.Identity;
 using ShopApp.WebUI.EmailServices;
 using Microsoft.Extensions.Configuration;
 using ShopApp.WebUI.Models;
-using Stripe;
 
 namespace ShopApp.WebUI
 {
@@ -93,6 +92,9 @@ namespace ShopApp.WebUI
             services.AddScoped<ICartRepository, EfCoreCartRepository>();
             services.AddScoped<ICartService, CartManager>();
 
+            services.AddScoped<IOrderRepository, EfCoreOrderRepository>();
+            services.AddScoped<IOrderService, OrderManager>();
+
             services.AddScoped<IEmailSender, SmtpEmailSender>(i =>
             new SmtpEmailSender(
                 _configuration["EmailSender:Host"],
@@ -119,7 +121,6 @@ namespace ShopApp.WebUI
                     Path.Combine(Directory.GetCurrentDirectory(), "node_modules")),
                 RequestPath = "/modules"
             });
-            StripeConfiguration.SetApiKey(configuration["Stripe:SecretKey"]);
             if (env.IsDevelopment())
             {
                 SeedDatabase.Seed();
@@ -133,6 +134,7 @@ namespace ShopApp.WebUI
             app.UseEndpoints(endpoints =>
 
             {
+
                 endpoints.MapControllerRoute(
                     name: "Checkout",
                     pattern: "Checkout",
