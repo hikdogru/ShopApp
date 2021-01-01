@@ -17,10 +17,12 @@ namespace ShopApp.WebUI.Controllers
             this._productService = productService;
         }
         // localhost/Products/Cell-Phone?page=1
+        [Route("Products")]
+        [Route("Products/{category?}")]
         public IActionResult List(string category, int page = 1)
         {
 
-            const int pageSize = 3; // Bir sayfada ne kadar ürünün gösterileceğini belirtir.
+            const int pageSize = 2; // Bir sayfada ne kadar ürünün gösterileceğini belirtir.
             var productViewModel = new ProductListViewModel()
             {
                 PageInfo = new PageInfo()

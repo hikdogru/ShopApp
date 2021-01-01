@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+using ShopApp.Entity;
 
-namespace ShopApp.Entity
+namespace ShopApp.WebUI.Models
 {
-    public class Order
+    public class OrderListModel
     {
-        public int Id { get; set; }
+        public int OrderId { get; set; }
         public string OrderNumber { get; set; }
 
         public DateTime OrderDate { get; set; }
@@ -24,28 +25,16 @@ namespace ShopApp.Entity
         public string Email { get; set; }
 
         public string Note { get; set; }
-
-        public string PaymentId { get; set; }
-        public string ConversationId { get; set; }
-
         public PaymentType PaymentType { get; set; }
         public OrderState OrderState { get; set; }
-        public List<OrderItem> OrderItems { get; set; }
-    }
+        public List<OrderItemModel> OrderItemModels { get; set; }
 
-    public enum OrderState
-    {
-        // 0'dan başlıyor değerlerini belirtmezsek birer birer artıyor.
-        Waiting,
-        // 1
-        Unpaid,
-        //2
-        Completed
+        public double TotalPrice()
+        {
+            return OrderItemModels.Sum(i => i.Price * i.Quantity);
+        }
+        
     }
+    
 
-    public enum PaymentType
-    {
-        CreditCard,
-        Eft
-    }
 }

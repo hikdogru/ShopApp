@@ -134,12 +134,18 @@ namespace ShopApp.WebUI
             app.UseEndpoints(endpoints =>
 
             {
+                endpoints.MapControllerRoute(
+                    name: "Orders",
+                    pattern: "Orders",
+                    defaults: new { controller = "Order", action = "GetOrders" }
+                );
 
                 endpoints.MapControllerRoute(
                     name: "Checkout",
                     pattern: "Checkout",
                     defaults: new { controller = "Cart", action = "Checkout" }
                 );
+
                 endpoints.MapControllerRoute(
                                 name: "Cart",
                                 pattern: "Cart",
@@ -224,11 +230,12 @@ namespace ShopApp.WebUI
                                 defaults: new { controller = "Shop", action = "Details" }
                             );
 
-                endpoints.MapControllerRoute(
-                                name: "products",
-                                pattern: "Products/{category?}",
-                                defaults: new { controller = "Shop", action = "List" }
-                            );
+                //endpoints.MapControllerRoute(
+                //                name: "products",
+                //                pattern: "Products/{category?}",
+                //                defaults: new { controller = "Shop", action = "List" }
+                //            );
+
 
                 endpoints.MapControllerRoute
                             (name: "default",

@@ -1,0 +1,331 @@
+﻿@model List<OrderListModel>
+
+@section Styles
+{
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="/css/orders.css">
+    <style>
+
+        body {
+            background-color: #eee;
+            font-family: 'Roboto', sans-serif
+        }
+
+        .main {
+            border-collapse: separate !important;
+            border-spacing: 0 11px !important
+        }
+
+        tr {
+            border: 1px solid #eee
+        }
+
+        .head th {
+            font-weight: 500
+        }
+
+        tr:nth-child(3) {
+            border: solid thin
+        }
+
+        .form-check-input:focus {
+            border-color: #8bbafe;
+            box-shadow: none;
+            outline: 0;
+        }
+
+        .btn {
+            color: #fff;
+            height: 27px;
+            line-height: 11px;
+        }
+
+        .form-check-input {
+            height: 1.15em;
+            margin-top: 3px;
+            width: 1.15em;
+        }
+
+        .btn:focus {
+            box-shadow: none !important;
+            color: #fff;
+        }
+
+        .order-color {
+            color: blue
+        }
+
+        .modal {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        /*.modal {
+            max-height: 500px;
+            overflow-y: scroll;
+        }*/
+
+
+    </style>
+}
+
+<div class="container mt-5">
+    @foreach (var order in Model)
+    {
+<table class="table table-borderless main">
+    <thead>
+        <tr class="head">
+            <th scope="col" class="ml-2">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                </div>
+            </th>
+            <th scope="col">Order ID</th>
+            <th scope="col">Order Date</th>
+            <th scope="col">Fullfillment</th>
+            <th scope="col">Total</th>
+            <th scope="col">Status</th>
+            <th scope="col">Updated</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+
+        <tr data-toggle="modal"
+            data-target="#exampleModal">
+
+            <th scope="row">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                </div>
+            </th>
+            <td class="order-color">@order.OrderNumber</td>
+            <td>@order.OrderDate.ToString("d")</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-warning btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false"> Unfullfilled </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="dropdown-item" href="#">Fullfilled</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Unfullfilled</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">Hold</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+            <td>$@order.TotalPrice()</td>
+            <td>
+                <div class="dropdown">
+                    <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false"> Authorized </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li>
+                            <a class="dropdown-item" href="#">Yes</a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">No</a>
+                        </li>
+                    </ul>
+                </div>
+            </td>
+            <td>Today</td>
+
+        <tr class="hide-table-padding">
+
+            <div class="modal fade" id="exampleModal" role="dialog">
+                <div class="modal-dialog modal-xl">
+
+                    <div class="modal-content">
+                        <div class="card card-1">
+                            <div class="card-body">
+                                @foreach (var item in order.OrderItemModels)
+                                {
+                <div class="row justify-content-between mb-3">
+                    <div class="col-auto">
+                        <h6 class="color-1 mb-0 change-color">Receipt</h6>
+                    </div>
+                    <div class="col-auto ">
+                        <small>Receipt Voucher : 1KAU9-84UIL</small>
+                    </div>
+                </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card card-2">
+                                                <div class="card-body">
+                                                    <div class="media">
+                                                        <div class="sq align-self-center ">
+                                                            <img class="img-fluid my-auto align-self-center mr-2 mr-md-4 pl-0 p-0 m-0" src="/img/@item.ImageUrl" width="135" height="135" />
+                                                        </div>
+                                                        <div class="media-body my-auto text-right">
+                                                            <div class="row my-auto flex-column flex-md-row">
+                                                                <div class="col my-auto">
+                                                                    <h6 class="mb-0"> @(order.FirstName + " " + order.LastName)</h6>
+                                                                </div>
+                                                                <div class="col-auto my-auto">
+                                                                    <small>Golden Rim </small>
+                                                                </div>
+                                                                <div class="col my-auto">
+                                                                    <small>Size : M</small>
+                                                                </div>
+                                                                <div class="col my-auto">
+                                                                    <small>Qty : @item.Quantity</small>
+                                                                </div>
+                                                                <div class="col my-auto">
+                                                                    <h6 class="mb-0">&#8377;</h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <hr class="my-3 ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                                        <div class="row mt-4">
+                                                            <div class="col">
+                                                                <div class="row justify-content-between">
+                                                                    <div class="col-auto">
+                                                                        <p class="mb-1 text-dark">
+                                                                            <b>Order Details</b>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="flex-sm-col text-right col">
+                                                                        <p class="mb-1">
+                                                                            <b>Total</b>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="flex-sm-col col-auto">
+                                                                        <p class="mb-1">&#36;@item.Price</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row justify-content-between">
+                                                                    <div class="flex-sm-col text-right col">
+                                                                        <p class="mb-1">
+                                                                            <b>Discount</b>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="flex-sm-col col-auto">
+                                                                        <p class="mb-1">&#8377;150</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row justify-content-between">
+                                                                    <div class="flex-sm-col text-right col">
+                                                                        <p class="mb-1">
+                                                                            <b>GST 18%</b>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="flex-sm-col col-auto">
+                                                                        <p class="mb-1">843</p>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row justify-content-between">
+                                                                    <div class="flex-sm-col text-right col">
+                                                                        <p class="mb-1">
+                                                                            <b>Delivery Charges</b>
+                                                                        </p>
+                                                                    </div>
+                                                                    <div class="flex-sm-col col-auto">
+                                                                        <p class="mb-1">Free</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                                            <div class="row invoice ">
+                                                                                <div class="col">
+                                                                                    <p class="mb-1"> Invoice Number : 788152</p>
+                                                                                    <p class="mb-1">Invoice Date : @order.OrderDate</p>
+                                                                                    <p class="mb-1">Recepits Voucher:18KU-62IIK</p>
+                                                                                </div>
+                                                                            </div>}
+                            </div>
+
+
+                            <div class="card-footer">
+                                <div class="jumbotron-fluid">
+                                    <div class="row justify-content-between ">
+                                        <div class="col-auto my-auto ">
+                                            <h2 class="mb-0 font-weight-bold">TOTAL PAID</h2>
+                                        </div>
+                                        <div class="col-auto my-auto ml-auto">
+                                            <h1 class="display-3 ">&#36; @order.TotalPrice()</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </tr>
+        </tr>
+    </tbody>
+
+</table>}
+
+
+</div>
+
+
+<!-- Modal -->
+@*<div class="modal fade"
+         id="exampleModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        Modal title
+                    </h5>
+                    <button type="button"
+                            class="close"
+                            data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">
+                            ×
+                        </span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>Popover in a modal</h5>
+                    <a href="#"
+                       data-toggle="popover"
+                       title="This is GeeksforGeeks"
+                       data-content="Portal for CS Geeks">
+                        Toggle popover
+                    </a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button"
+                            class="btn btn-secondary"
+                            data-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="button"
+                            class="btn btn-primary">
+                        Save changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+
+@*@section Scripts
+    {
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    }*@

@@ -22,7 +22,6 @@ namespace ShopApp.WebUI.Controllers
     [Authorize]
     public class CartController : Controller
     {
-        public string sessionId = "";
         private ICartService _cartService;
         private UserManager<User> _userManager;
         private IOrderService _orderService;
@@ -54,6 +53,7 @@ namespace ShopApp.WebUI.Controllers
                 }).ToList()
             };
             return View(cartModel);
+
         }
         [HttpPost]
         public IActionResult AddToCart(int productId, int quantity)
@@ -153,7 +153,7 @@ namespace ShopApp.WebUI.Controllers
                 PaymentType = PaymentType.CreditCard,
                 PaymentId = payment.PaymentId,
                 ConversationId = payment.ConversationId,
-                OrderDate = new DateTime(),
+                OrderDate = DateTime.Now,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 Address = model.Address,
