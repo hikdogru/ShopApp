@@ -20,9 +20,9 @@ namespace ShopApp.Business.Concrete
             _orderRepository.Create(order);
         }
 
-        public List<Order> GetOrders(string userId)
+        public List<Order> GetOrders(string userId, bool isAdmin)
         {
-            return _orderRepository.GetOrders(userId);
+            return _orderRepository.GetOrders(userId, isAdmin);
         }
     }
 

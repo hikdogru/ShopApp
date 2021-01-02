@@ -135,6 +135,12 @@ namespace ShopApp.WebUI
 
             {
                 endpoints.MapControllerRoute(
+                    name: "AdminOrders",
+                    pattern: "Admin/Orders",
+                    defaults: new { controller = "Order", action = "GetOrders" }
+                );
+
+                endpoints.MapControllerRoute(
                     name: "Orders",
                     pattern: "Orders",
                     defaults: new { controller = "Order", action = "GetOrders" }

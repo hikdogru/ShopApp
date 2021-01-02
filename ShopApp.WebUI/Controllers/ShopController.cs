@@ -22,7 +22,7 @@ namespace ShopApp.WebUI.Controllers
         public IActionResult List(string category, int page = 1)
         {
 
-            const int pageSize = 2; // Bir sayfada ne kadar ürünün gösterileceğini belirtir.
+            const int pageSize = 6; // Bir sayfada ne kadar ürünün gösterileceğini belirtir.
             var productViewModel = new ProductListViewModel()
             {
                 PageInfo = new PageInfo()

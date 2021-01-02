@@ -10,7 +10,7 @@ namespace ShopApp.DataAccess.Concrete.EfCore
 {
     public class EfCoreOrderRepository : EfCoreGenericRepository<Order, ShopContext>, IOrderRepository
     {
-        public List<Order> GetOrders(string userId)
+        public List<Order> GetOrders(string userId, bool isAdmin)
         {
             using (var context = new ShopContext())
             {
@@ -20,7 +20,14 @@ namespace ShopApp.DataAccess.Concrete.EfCore
                     .AsQueryable();
                 if (!string.IsNullOrEmpty(userId))
                 {
-                    orderList = orderList.Where(i => i.UserId == userId);
+                    if (isAdmin)
+                    {
+                        return orderList.ToList();
+                    }
+                    else
+                    {
+                        orderList = orderList.Where(i => i.UserId == userId);
+                    }
                 }
 
                 return orderList.ToList();

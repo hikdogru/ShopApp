@@ -1,4 +1,9 @@
-﻿<div class="navbar navbar-light navbar-expand-sm" style="background-color: #c5cbe3;">
+﻿@section Styles
+{
+  
+}
+
+<div class="navbar navbar-light navbar-expand-sm" style="background-color: #D6DBC5;">
     <div class="container">
         <a href="/" class="navbar-brand">ShopApp</a>
         <ul class="navbar-nav mr-auto">
@@ -9,7 +14,7 @@
                 </a>
             </li>
 
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity.IsAuthenticated && !User.IsInRole("admin"))
             {
                 <li class="nav-item">
                     <a href="/Cart" class="nav-link">
@@ -22,49 +27,64 @@
                         Orders
                     </a>
                 </li>
-                @if (User.IsInRole("admin"))
-                {
-                    <li class="nav-item">
-                        <a href="/Admin/Products" class="nav-link">
-                            Admin Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/Admin/Categories" class="nav-link">
-                            Admin Categories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/Admin/Role/List" class="nav-link">
-                            Admin Roles
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="/Admin/User/List" class="nav-link">
-                            Admin Users
-                        </a>
-                    </li>
-                }
-
             }
-        </ul>
+            else
+            {
+                <li class="nav-item">
+                    <a href="/Admin/Products" class="nav-link">
+                        Admin Products
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Admin/Categories" class="nav-link">
+                        Admin Categories
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Admin/Role/List" class="nav-link">
+                        Admin Roles
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Admin/User/List" class="nav-link">
+                        Admin Users
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/Admin/Orders" class="nav-link">
+                        Admin Orders
+                    </a>
+                </li>
+            }
 
+
+        </ul>
 
 
         <ul class="navbar-nav ml-auto">
             @* Kullanıcı giriş yaptıysa *@
             @if (User.Identity.IsAuthenticated)
             {
-                <li class="nav-item">
-                    <a href="/Account/Manage" class="nav-link">
+
+                @* <a href="/Account/Manage" class="nav-link">
                         @User.Identity.Name
-                    </a>
+                    </a> *@
+
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"> @User.Identity.Name</a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">Inbox</a>
+                        <a href="#" class="dropdown-item">Drafts</a>
+                        <a asp-controller="Account" asp-action="Logout" class="dropdown-item">Logout</a>
+                    </div>
                 </li>
-                <li class="nav-item">
-                    <a asp-controller="Account" asp-action="Logout" class="nav-link">
-                        Logout
-                    </a>
-                </li>
+
+
+                @* <li class="nav-item">
+                        <a asp-controller="Account" asp-action="Logout" class="nav-link">
+                            Logout
+                        </a>
+                    </li> *@
             }
             else
             {

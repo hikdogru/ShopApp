@@ -498,6 +498,8 @@ namespace ShopApp.WebUI.Controllers
             TempData["message"] = JsonConvert.SerializeObject(msj);
         }
 
+        
+
 
     }
 }

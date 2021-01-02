@@ -27,14 +27,14 @@ namespace ShopApp.WebUI.Models
         public string Note { get; set; }
         public PaymentType PaymentType { get; set; }
         public OrderState OrderState { get; set; }
-        public List<OrderItemModel> OrderItemModels { get; set; }
+        public List<OrderItemModel> OrderItems { get; set; }
 
         public double TotalPrice()
         {
-            return OrderItemModels.Sum(i => i.Price * i.Quantity);
+            return OrderItems.Sum(i => i.Price * i.Quantity);
         }
-        
+
     }
-    
+
 
 }

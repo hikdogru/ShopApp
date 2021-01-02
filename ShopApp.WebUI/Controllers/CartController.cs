@@ -198,27 +198,34 @@ namespace ShopApp.WebUI.Controllers
             request.ConversationId = new Random().Next(111111, 999999).ToString();
             request.Price = model.CartModel.TotalPrice().ToString();
             request.PaidPrice = model.CartModel.TotalPrice().ToString();
-            request.Currency = Currency.TRY.ToString();
+            request.Currency = Currency.USD.ToString();
             request.Installment = 1;
             request.BasketId = "B67832";
             request.PaymentChannel = PaymentChannel.WEB.ToString();
             request.PaymentGroup = PaymentGroup.PRODUCT.ToString();
 
             PaymentCard paymentCard = new PaymentCard();
-            paymentCard.CardHolderName = "John Doe";
-            paymentCard.CardNumber = "5528790000000008";
-            paymentCard.ExpireMonth = "12";
-            paymentCard.ExpireYear = "2030";
-            paymentCard.Cvc = "123";
+            paymentCard.CardHolderName = model.CardName;
+            paymentCard.CardNumber = model.CardNumber;
+            paymentCard.ExpireMonth = model.ExpirationMonth;
+            paymentCard.ExpireYear = model.ExpirationYear;
+            paymentCard.Cvc = model.Cvc;
             paymentCard.RegisterCard = 0;
             request.PaymentCard = paymentCard;
 
+            // 5400010000000004 -- Non - Turkish(Credit)
+            //paymentCard.CardNumber = "5400010000000004";
+            //paymentCard.ExpireMonth = "12";
+            //paymentCard.ExpireYear = "2030";
+            //paymentCard.Cvc = "123";
+
+
             Buyer buyer = new Buyer();
             buyer.Id = "BY789";
-            buyer.Name = "John";
-            buyer.Surname = "Doe";
-            buyer.GsmNumber = "+905350000000";
-            buyer.Email = "email@email.com";
+            buyer.Name = model.FirstName;
+            buyer.Surname = model.LastName;
+            buyer.GsmNumber = model.Phone; // "+905350000000";
+            buyer.Email = model.Email;
             buyer.IdentityNumber = "74300864791";
             buyer.LastLoginDate = "2015-10-05 12:43:35";
             buyer.RegistrationDate = "2013-04-21 15:12:09";
@@ -226,23 +233,23 @@ namespace ShopApp.WebUI.Controllers
             buyer.Ip = "85.34.78.112";
             buyer.City = "Istanbul";
             buyer.Country = "Turkey";
-            buyer.ZipCode = "34732";
+            buyer.ZipCode = model.Zip;
             request.Buyer = buyer;
 
             Address shippingAddress = new Address();
-            shippingAddress.ContactName = "Jane Doe";
-            shippingAddress.City = "Istanbul";
+            shippingAddress.ContactName = model.CardName;
+            shippingAddress.City = model.City;
             shippingAddress.Country = "Turkey";
             shippingAddress.Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
-            shippingAddress.ZipCode = "34742";
+            shippingAddress.ZipCode = model.Zip;
             request.ShippingAddress = shippingAddress;
 
             Address billingAddress = new Address();
-            billingAddress.ContactName = "Jane Doe";
-            billingAddress.City = "Istanbul";
+            billingAddress.ContactName = model.CardName;
+            billingAddress.City = model.City;
             billingAddress.Country = "Turkey";
             billingAddress.Description = "Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1";
-            billingAddress.ZipCode = "34742";
+            billingAddress.ZipCode = model.Zip;
             request.BillingAddress = billingAddress;
 
 

@@ -29,7 +29,8 @@ namespace ShopApp.WebUI.Controllers
         public IActionResult GetOrders()
         {
             string userId = _userManager.GetUserId(User);
-            var orderList = _orderService.GetOrders(userId);
+            var isAdmin = User.IsInRole("admin"); 
+            var orderList = _orderService.GetOrders(userId,isAdmin);
             var orderListModel = new List<OrderListModel>();
             OrderListModel orderModel;
             foreach (var order in orderList)
@@ -46,17 +47,17 @@ namespace ShopApp.WebUI.Controllers
                     Email = order.Email,
                     City = order.City,
                     Address = order.Address,
-                    
-                    
+                    OrderItems = order.OrderItems.Select(i => new OrderItemModel()
+                    {
+                        OrderItemId = i.Id,
+                        Name = i.Product.Name,
+                        ImageUrl = i.Product.ImageUrl,
+                        Price = i.Price,
+                        Quantity = i.Quantity
+                    }).ToList()
+
                 };
-                orderModel.OrderItemModels = order.OrderItems.Select(i => new OrderItemModel()
-                {
-                    OrderItemId = i.Id,
-                    Name = i.Product.Name,
-                    ImageUrl = i.Product.ImageUrl,
-                    Price = i.Price,
-                    Quantity = i.Quantity
-                }).ToList();
+
                 orderListModel.Add(orderModel);
             }
 
