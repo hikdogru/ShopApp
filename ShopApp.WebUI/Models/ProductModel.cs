@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using ShopApp.Entity;
 
 namespace ShopApp.WebUI.Models
@@ -23,7 +24,8 @@ namespace ShopApp.WebUI.Models
         [Required(ErrorMessage = "Description is required field!")]
         public string Description { get; set; }
         [Display(Name = "Image Url")]
-        [Required(ErrorMessage = "Image Url is required field!")]
+        //[Required(ErrorMessage = "Image Url is required field!")]
+        [DataType(DataType.Upload)]
         public string ImageUrl { get; set; }
 
         public bool IsHome { get; set; }

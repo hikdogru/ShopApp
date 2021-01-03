@@ -222,18 +222,32 @@ namespace ShopApp.WebUI.Controllers
 
         // Post metodu
         [HttpPost]
-        public IActionResult ProductCreate(ProductModel model)
+        public async Task<IActionResult> ProductCreate(ProductModel model, IFormFile file)
         {
             if (ModelState.IsValid)
             {
+                var imageUrl = "";
+                if (file != null)
+                {
+                    var extension = Path.GetExtension(file.FileName);// Resmin uzantısını alıyoruz.
+                    var randomName = string.Format($"{Guid.NewGuid()}{extension}");// Guid ile benzersiz isim üretiyoruz.
+                    imageUrl = randomName;
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\img", randomName);
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
+                }
+
                 var entity = new Product()
                 {
                     Name = model.Name,
                     Description = model.Description,
                     Price = model.Price,
-                    ImageUrl = model.ImageUrl,
+                    ImageUrl = imageUrl,
                     Url = model.Url
                 };
+
                 if (_productService.Create(entity))
                 {
                     TempData.Put("message", new AlertMessage()
@@ -498,7 +512,7 @@ namespace ShopApp.WebUI.Controllers
             TempData["message"] = JsonConvert.SerializeObject(msj);
         }
 
-        
+
 
 
     }

@@ -452,7 +452,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\js\" />
-    <Folder Include="wwwroot\img\" />
   </ItemGroup>
 
   <ItemGroup>

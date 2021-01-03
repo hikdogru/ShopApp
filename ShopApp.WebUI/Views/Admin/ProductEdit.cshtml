@@ -66,7 +66,7 @@
             {
                 <input type="hidden" name="SelectedCategories[@i].CategoryId"
                        value="@Model.SelectedCategories[@i].CategoryId">
-                <input type="hidden" name="SelectedCategories[@i].Name" value="@Model.SelectedCategories[@i].Name">
+                <input type="hidden" name="SelectedCategories[@i].Name" value="@Model.SelectedCategories[i].Name">
             }
 
             @foreach (var item in (List<Category>)ViewBag.Categories)

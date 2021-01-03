@@ -14,7 +14,7 @@
                 </a>
             </li>
 
-            @if (User.Identity.IsAuthenticated && !User.IsInRole("admin"))
+            @if (User.Identity.IsAuthenticated)
             {
                 <li class="nav-item">
                     <a href="/Cart" class="nav-link">
@@ -27,10 +27,9 @@
                         Orders
                     </a>
                 </li>
-            }
-            else
-            {
-                <li class="nav-item">
+                if (User.IsInRole("admin"))
+                {
+                     <li class="nav-item">
                     <a href="/Admin/Products" class="nav-link">
                         Admin Products
                     </a>
@@ -55,7 +54,12 @@
                         Admin Orders
                     </a>
                 </li>
+                }
+            
+               
+            
             }
+            
 
 
         </ul>
