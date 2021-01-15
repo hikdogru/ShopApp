@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ShopApp.Business.Abstract;
+using ShopApp.DataAccess.Abstract;
+using ShopApp.DataAccess.Concrete.EfCore;
 using ShopApp.WebUI.Models;
-
+using ShopApp.Entity;
 
 namespace ShopApp.WebUI.Controllers
 {
@@ -22,7 +24,7 @@ namespace ShopApp.WebUI.Controllers
         public IActionResult List(string category, int page = 1)
         {
 
-            const int pageSize = 6; // Bir sayfada ne kadar ürünün gösterileceğini belirtir.
+            const int pageSize = 3; // Bir sayfada ne kadar ürünün gösterileceğini belirtir.
             var productViewModel = new ProductListViewModel()
             {
                 PageInfo = new PageInfo()
@@ -45,13 +47,23 @@ namespace ShopApp.WebUI.Controllers
                 return NotFound();
             }
             var product = _productService.GetProductDetails(url);
+            
             if (product == null)
             {
                 return NotFound();
             }
+
+
+            //var productRecommends = ProductRecommendation(product.ProductId);
+            //if (productRecommends==null)
+            //{
+            //    return NotFound();
+            //}
+
             return View(new ProductDetailModel
             {
                 Product = product,
+                //ProductRecommends = productRecommends,
                 Categories = product.ProductCategories.Select(c => c.Category).ToList()
             });
         }
@@ -65,5 +77,11 @@ namespace ShopApp.WebUI.Controllers
             };
             return View(productViewModel);
         }
+
+        //public List<Product> ProductRecommendation(int productId)
+        //{
+        //    var products = _productService.GetProductRecommendation(productId);
+        //    return products;
+        //}
     }
 }

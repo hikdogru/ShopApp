@@ -1,6 +1,7 @@
 ﻿@model Product
 
-<div class="card mb-3">
+
+<div class="card mb-4 h-100">
     <img class="card-img-top" src="~/img/@Model.ImageUrl" alt="">
     <div class="card-body">
         <h5 class="card-title">@Model.Name</h5>
@@ -15,11 +16,9 @@
             <i class="fa fa-eye"></i> Details
         </a>
 
-    @* Kullanıcı giriş yaptıysa *@ 
-    @* @if (User.Identity.IsAuthenticated)
+    @* Kullanıcı rolü admin değilse *@ 
+    @if (!User.IsInRole("admin"))
     {
-        
-    } *@
         <form asp-controller="Cart" asp-action="AddToCart" method="POST" style="display: inline;">
             <input type="hidden" name="productId" value="@Model.ProductId">
             <input type="hidden" name="quantity" value="1">
@@ -28,6 +27,6 @@
             </button>
         </form>
 
-
+    }
     </div>
 </div>

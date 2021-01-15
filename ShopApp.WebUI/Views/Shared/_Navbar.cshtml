@@ -1,9 +1,4 @@
-﻿@section Styles
-{
-  
-}
-
-<div class="navbar navbar-light navbar-expand-sm" style="background-color: #D6DBC5;">
+﻿<div class="navbar navbar-light navbar-expand-sm" style="background-color: #D6DBC5;">
     <div class="container">
         <a href="/" class="navbar-brand">ShopApp</a>
         <ul class="navbar-nav mr-auto">
@@ -16,7 +11,8 @@
 
             @if (User.Identity.IsAuthenticated)
             {
-                <li class="nav-item">
+                @if(!User.IsInRole("admin")){
+                    <li class="nav-item">
                     <a href="/Cart" class="nav-link">
                         Cart
                     </a>
@@ -27,6 +23,8 @@
                         Orders
                     </a>
                 </li>
+                }
+                
                 if (User.IsInRole("admin"))
                 {
                      <li class="nav-item">

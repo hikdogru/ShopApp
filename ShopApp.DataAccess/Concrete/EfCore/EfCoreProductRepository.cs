@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using ShopApp.DataAccess.Abstract;
 using ShopApp.Entity;
@@ -119,5 +120,31 @@ namespace ShopApp.DataAccess.Concrete.EfCore
                 return homePageProducts.ToList();
             }
         }
+
+        //public List<Product> GetProductRecommendation(int productId)
+        //{
+        //    var products = new List<Category>();
+            
+        //    using (var context = new ShopContext())
+        //    {
+        //        var category = context.Categories
+        //            .Where(c=>c.ProductCategories
+        //                .Any(c=>c.ProductId==productId));
+                
+        //        foreach (var item in category)
+        //        {
+        //                var product = context.Categories
+        //                    .Where(c => c.CategoryId == item.CategoryId)
+        //                    .Include(c => c.ProductCategories)
+        //                    .ThenInclude(c => c.Product).FirstOrDefault();
+        //            products.Add(product);
+                        
+        //        }
+                
+
+
+        //        return null;
+        //    }}
+        
     }
 }

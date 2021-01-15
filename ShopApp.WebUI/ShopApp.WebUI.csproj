@@ -3179,9 +3179,36 @@
     <None Include="node_modules\jquery\src\var\support.js" />
     <None Include="node_modules\jquery\src\var\toString.js" />
     <None Include="node_modules\jquery\src\wrap.js" />
+    <None Include="wwwroot\css\accessdenied.css" />
+    <None Include="wwwroot\css\orders.css" />
+    <None Include="wwwroot\css\style.css" />
+    <None Include="wwwroot\img\4-back-e%402x.webp" />
+    <None Include="wwwroot\img\4-left-e%402x.webp" />
+    <None Include="wwwroot\img\4-right-e%402x.webp" />
+    <None Include="wwwroot\img\40774d0e-9a10-4c74-97c4-e7b830d6a6fc.png" />
+    <None Include="wwwroot\img\b_msi-ge75-8se-230xtr-1.png" />
+    <None Include="wwwroot\img\e1aa9712-a0c1-4bf2-87e1-0d68ec0545c6.jpg" />
+    <None Include="wwwroot\img\Electronics.svg" />
+    <None Include="wwwroot\img\hero_endframe__bsza6x4fldiq_large.jpg" />
+    <None Include="wwwroot\img\hero__bfjjcq865owi_large.jpg" />
+    <None Include="wwwroot\img\iphone-4858453_1920.png" />
+    <None Include="wwwroot\img\logo.png" />
+    <None Include="wwwroot\img\m_apple-ipad-pro-11-1tb-wi-fi-plus-cellular-mxf22ll-a-1.png" />
+    <None Include="wwwroot\img\m_asus-g731gw-ev019-1.jpg" />
+    <None Include="wwwroot\img\m_huawei-p40-pro-5.png" />
+    <None Include="wwwroot\img\m_lg-oled65w9pla-1.jpg" />
+    <None Include="wwwroot\img\m_microsoft-surface-pro-6-4.png" />
+    <None Include="wwwroot\img\m_oneplus-8-pro-256gb-14.png" />
+    <None Include="wwwroot\img\m_philips-65oled805-6.jpg" />
+    <None Include="wwwroot\img\m_samsung-75q800t-1.jpg" />
+    <None Include="wwwroot\img\m_samsung-galaxy-note-20-ultra-1.png" />
+    <None Include="wwwroot\img\m_samsung-galaxy-s20-ultra-1.png" />
+    <None Include="wwwroot\img\photo-1574771540177-1b67712f6c6e.png" />
+    <None Include="wwwroot\img\photo-1583573636246-18cb2246697f.jfif" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="ASPSMS" Version="0.0.2" />
     <PackageReference Include="Iyzipay" Version="2.1.39" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.0" />

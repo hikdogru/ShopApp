@@ -57,6 +57,11 @@ namespace ShopApp.Business.Concrete
             return _productRepository.GetByIdWithCategories(productId);
         }
 
+        //public List<Product> GetProductRecommendation(int productId)
+        //{
+        //    return _productRepository.GetProductRecommendation(productId);
+        //}
+
         public bool Update(Product entity)
         {
             if (Validation(entity))
@@ -125,5 +130,7 @@ namespace ShopApp.Business.Concrete
 
             return isValid;
         }
+
+        
     }
 }

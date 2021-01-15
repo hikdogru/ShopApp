@@ -21,7 +21,7 @@ namespace ShopApp.WebUI.Controllers
         private SignInManager<User> _signInManager; // Cookie işlemlerini yönetmek için
         private IEmailSender _emailSender;
         private ICartService _cartService;
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender,ICartService cartService)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IEmailSender emailSender, ICartService cartService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -69,8 +69,9 @@ namespace ShopApp.WebUI.Controllers
 
                     if (result.Succeeded)
                     {
+                        model.ReturnUrl = model.ReturnUrl == "/Cart/AddToCart" ? "/Cart" : "/";
                         // iki soru işareti null mu diye kontrol ediyor.
-                        return Redirect(model.ReturnUrl ?? "~/");
+                        return Redirect(model.ReturnUrl);
                     }
 
 

@@ -18,6 +18,6 @@ namespace ShopApp.Business.Abstract
         
         int GetCountByCategory(string category);
         Product GetByIdWithCategories(int productId);
-        
+        //List<Product> GetProductRecommendation(int productId);
     }
 }
